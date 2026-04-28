@@ -135,7 +135,7 @@
       <div>
         <p class="eyebrow">Perfect for Any Celebration</p>
         <h2>Big energy for every kind of crowd</h2>
-        <p>Whether it’s an intimate birthday gathering, a corporate team-building event, or a grand wedding reception, Drop the Mic Karaoke brings energy and excitement to every occasion. We specialize in creating unforgettable moments that bring people together through music and fun.</p>
+        <p>Whether it’s an intimate birthday gathering, a corporate team-building event, or a grand wedding reception, Mic Drop Karaoke brings energy and excitement to every occasion. We specialize in creating unforgettable moments that bring people together through music and fun.</p>
       </div>
       <div class="event-tags" aria-label="Event types">
         <span>Private Parties</span>
@@ -154,7 +154,7 @@
       </div>
       <div class="testimonial-grid">
         <blockquote>
-          <p>“Drop the Mic Karaoke made our wedding reception unforgettable! The energy was amazing, and our guests are still talking about it. Professional, fun, and highly recommended!”</p>
+          <p>“Mic Drop Karaoke made our wedding reception unforgettable! The energy was amazing, and our guests are still talking about it. Professional, fun, and highly recommended!”</p>
           <footer>Sarah Mitchell <span>Wedding Reception</span></footer>
         </blockquote>
         <blockquote>
@@ -171,10 +171,12 @@
     <section id="book" class="section-pad booking-section">
       <div class="booking-card">
         <div class="section-heading left">
-          <p class="eyebrow">Ready to Drop the Mic?</p>
+          <p class="eyebrow">Ready to Mic Drop?</p>
           <h2>Tell us about your event and we’ll handle the rest.</h2>
         </div>
-        <form id="booking-form">
+        <form id="booking-form" method="POST">
+          <input type="text" name="_gotcha" class="hidden-field" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="_subject" value="New Mic Drop Karaoke booking request" />
           <div class="form-grid">
             <label>Your Name *<input required name="name" type="text" autocomplete="name" /></label>
             <label>Email Address *<input required name="email" type="email" autocomplete="email" /></label>
@@ -197,7 +199,7 @@
             <label class="full-span">Event Details &amp; Special Requests<textarea name="details" rows="5"></textarea></label>
           </div>
           <button class="button primary" type="submit">Request Booking</button>
-          <p class="form-note">This static GitHub Pages version opens an email with the booking details. Change the email address in <strong>script.js</strong>.</p>
+          <p class="form-note">This form sends in the background after you connect your free form endpoint in <strong>script.js</strong>.</p>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -214,7 +216,7 @@
       <a href="#how-it-works">How It Works</a>
       <a href="#book">Book Now</a>
     </nav>
-    <p class="copyright">© 2026 Drop the Mic Karaoke. All rights reserved.</p>
+    <p class="copyright">© 2026 Mic Drop Karaoke. All rights reserved.</p>
   </footer>
   <script src="script.js"></script>
 </body>

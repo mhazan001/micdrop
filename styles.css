@@ -125,3 +125,11 @@ form .button { margin-top: 20px; }
   .featured { transform: none; }
   .full-span { grid-column: auto; }
 }
+
+.hidden-field {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
