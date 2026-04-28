@@ -24,7 +24,7 @@ form?.addEventListener("submit", (event) => {
   const data = new FormData(form);
   const subject = `Booking Request: ${data.get("eventType") || "Karaoke Event"}`;
   const body = [
-    "New Drop the Mic Karaoke booking request:",
+    "Mic Drop Karaoke booking request:",
     "",
     `Name: ${data.get("name")}`,
     `Email: ${data.get("email")}`,
