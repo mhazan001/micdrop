@@ -1,5 +1,5 @@
 # Mic Drop Karaoke Website
-
+#rerunfailedjob
 Static GitHub Pages website for Mic Drop Karaoke.
 
 ## Files
