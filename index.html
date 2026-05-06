@@ -24,7 +24,8 @@
       <a href="#packages">Packages</a>
       <a href="#how-it-works">How It Works</a>
       <a href="#events">Events</a>
-      <a href="#testimonials">Testimonials</a>
+      <a href="#upcoming-events">Event Dates</a>
+      <a href="#reviews">Reviews</a>
       <a class="nav-cta" href="#book">Book Now</a>
     </nav>
   </header>
@@ -147,24 +148,61 @@
       </div>
     </section>
 
-    <section id="testimonials" class="section-pad light-section">
+
+
+    <section id="upcoming-events" class="section-pad light-section upcoming-events-section">
       <div class="section-heading">
-        <p class="eyebrow">What Our Guests Are Saying</p>
-        <h2>Real experiences from real events</h2>
+        <p class="eyebrow">Upcoming Event Dates</p>
+        <h2>Where we’ll be next</h2>
+        <p>Public shows and booked dates are managed from one simple file: <strong>site-data.js</strong>. Only future events appear on the website.</p>
       </div>
-      <div class="testimonial-grid">
-        <blockquote>
-          <p>“Mic Drop Karaoke made our wedding reception unforgettable! The energy was amazing, and our guests are still talking about it. Professional, fun, and highly recommended!”</p>
-          <footer>Sarah Mitchell <span>Wedding Reception</span></footer>
-        </blockquote>
-        <blockquote>
-          <p>“We booked them for our company holiday party and it was the highlight of the year. Great equipment, fantastic energy, and the team was incredibly easy to work with.”</p>
-          <footer>James Chen <span>Corporate Event</span></footer>
-        </blockquote>
-        <blockquote>
-          <p>“Best decision ever for my 30th birthday! Everyone had such a blast. The song selection was amazing and the whole setup was seamless. Can’t wait to book them again!”</p>
-          <footer>Emma Kindle <span>Birthday Party</span></footer>
-        </blockquote>
+
+      <div class="events-card">
+        <div id="events-empty" class="events-state hidden">
+          <h3>No upcoming public events posted yet</h3>
+          <p>Ask about your preferred date and we’ll check availability.</p>
+          <a class="button primary" href="#book">Ask About a Date</a>
+        </div>
+        <div id="events-list" class="events-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section-pad reviews-section">
+      <div class="section-heading">
+        <p class="eyebrow">Reviews</p>
+        <h2>What guests are saying</h2>
+        <p>Approved reviews are displayed here. New reviews are sent to you first, so you can decide what to publish.</p>
+      </div>
+
+      <div id="reviews-list" class="testimonial-grid" aria-live="polite"></div>
+
+      <div class="review-submit-card">
+        <div>
+          <p class="eyebrow">Leave a Review</p>
+          <h3>Had a great Mic Drop Karaoke night?</h3>
+          <p>Share a quick review. It will be sent to Mic Drop Karaoke for approval before being posted publicly.</p>
+        </div>
+        <form id="review-form" method="POST">
+          <input type="text" name="_gotcha" class="hidden-field" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="_subject" value="New Mic Drop Karaoke review" />
+          <div class="form-grid">
+            <label>Your Name *<input required name="name" type="text" autocomplete="name" /></label>
+            <label>Email Address *<input required name="email" type="email" autocomplete="email" /></label>
+            <label>Event Type<input name="eventType" type="text" placeholder="Birthday, bar night, private party..." /></label>
+            <label>Rating
+              <select name="rating">
+                <option>5 stars</option>
+                <option>4 stars</option>
+                <option>3 stars</option>
+                <option>2 stars</option>
+                <option>1 star</option>
+              </select>
+            </label>
+            <label class="full-span">Your Review *<textarea required name="review" rows="5" placeholder="Tell us what made the night fun..."></textarea></label>
+          </div>
+          <button class="button primary" type="submit">Submit Review</button>
+          <p id="review-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
 
@@ -199,7 +237,7 @@
             <label class="full-span">Event Details &amp; Special Requests<textarea name="details" rows="5"></textarea></label>
           </div>
           <button class="button primary" type="submit">Request Booking</button>
-    
+          <p class="form-note">This form sends in the background after you connect your free form endpoint in <strong>script.js</strong>.</p>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -214,10 +252,13 @@
     <nav>
       <a href="#packages">Packages</a>
       <a href="#how-it-works">How It Works</a>
+      <a href="#upcoming-events">Event Dates</a>
+      <a href="#reviews">Reviews</a>
       <a href="#book">Book Now</a>
     </nav>
     <p class="copyright">© 2026 Mic Drop Karaoke. All rights reserved.</p>
   </footer>
+  <script src="site-data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

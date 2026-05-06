@@ -1,34 +1,101 @@
 # Mic Drop Karaoke Website
 
-Free static website for GitHub Pages.
+Static GitHub Pages website for Mic Drop Karaoke.
 
 ## Files
 
-- `index.html` — page content and layout
-- `styles.css` — design and responsive styling
-- `script.js` — mobile menu and booking email form
+- `index.html` — main website page
+- `styles.css` — visual styling
+- `script.js` — form sending, event rendering, and review rendering
+- `site-data.js` — the simple edit file for upcoming events and approved reviews
 
-## Publish free on GitHub Pages
+## Booking form and review form
 
-1. Create a new GitHub repository, for example `mic-drop-karaoke`.
-2. Upload `index.html`, `styles.css`, `script.js`, and this `README.md` to the repository root.
-3. In GitHub, go to **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select branch `main` and folder `/root`, then click **Save**.
-6. GitHub will give you a free URL like `https://yourusername.github.io/mic-drop-karaoke/`.
+Both forms submit to Formspree using this endpoint in `script.js`:
 
-## Background booking form setup
+```js
+const FORM_ENDPOINT = "https://formspree.io/f/xwvaglkv";
+```
 
-GitHub Pages is static, so it cannot send email directly from the server. This version is ready to send booking requests in the background through a form endpoint.
+The booking form sends booking requests.
+The review form sends new reviews to you first. Reviews are **not automatically published** to the public website. This protects you from spam or bad reviews.
 
-Recommended free/easy option: Formspree.
+## How to add an upcoming event
 
-1. Create a Formspree account.
-2. Create a new form.
-3. Copy the endpoint URL, which usually looks like `https://formspree.io/f/xxxxxxxx`.
-4. Open `script.js`.
-5. Replace `PASTE_YOUR_FORM_ENDPOINT_HERE` with your real endpoint.
-6. Commit and push the files to GitHub.
-7. Test the form once and confirm your email if the service asks you to.
+Open `site-data.js` and add a new event inside `UPCOMING_EVENTS`.
 
-Other options: Static Forms, Getform, Basin, or moving the site to Netlify and using Netlify Forms.
+Example:
+
+```js
+{
+  title: "Karaoke Night at Audacious Aleworks",
+  date: "2026-07-10",
+  startTime: "20:00",
+  endTime: "00:00",
+  location: "Audacious Aleworks",
+  description: "Join Mic Drop Karaoke for a high-energy night of singing and laughs.",
+  isPrivate: false
+}
+```
+
+Use date format `YYYY-MM-DD`.
+Use 24-hour time: `20:00` means 8:00 PM and `00:00` means 12:00 AM.
+
+Only future events appear on the website. Past events automatically disappear from the list.
+
+## How to add a booked/private date
+
+Use a public-safe title and no private customer info.
+
+```js
+{
+  title: "Booked — Private Event",
+  date: "2026-07-18",
+  startTime: "",
+  endTime: "",
+  location: "Private Event",
+  description: "Mic Drop Karaoke is booked for a private event.",
+  isPrivate: true
+}
+```
+
+Do not put customer names, private addresses, phone numbers, or payment details in `site-data.js`.
+
+## How to approve and publish a review
+
+When a review comes in through Formspree, copy the approved text into `APPROVED_REVIEWS` in `site-data.js`.
+
+Example:
+
+```js
+{
+  name: "Jane D.",
+  eventType: "Birthday Party",
+  rating: 5,
+  quote: "Mic Drop Karaoke made the night unforgettable. Everyone had a blast."
+}
+```
+
+## How to remove a review
+
+Open `site-data.js` and delete that review block from `APPROVED_REVIEWS`.
+
+## Deploy to GitHub Pages
+
+Upload these files to the root of your GitHub repo:
+
+- `index.html`
+- `styles.css`
+- `script.js`
+- `site-data.js`
+- `README.md`
+
+Then go to:
+
+GitHub repo → Settings → Pages → Deploy from branch → `main` / root
+
+Your custom domain should remain:
+
+```text
+mic-drop-events.com
+```
