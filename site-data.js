@@ -74,3 +74,9 @@ const APPROVED_REVIEWS = [
     quote: "Best decision ever for my birthday. Everyone had a blast, the song selection was great, and the setup was seamless."
   }
 ];
+const SMUGMUG_SLIDESHOW = {
+  enabled: true,
+  title: "Mic Drop Moments",
+  subtitle: "Photos from our karaoke nights, private parties, and community events.",
+  embedUrl: "https://www.smugmug.com/frame/slideshow?key=6Fxv6G&speed=3&transition=fade&autoStart=1&captions=0&navigation=0&playButton=0&randomize=0&transitionSpeed=2"
+};
