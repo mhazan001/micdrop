@@ -419,10 +419,6 @@ h3 {
   color: var(--muted);
 }
 
-.muted.light {
-  color: #fff;
-}
-
 .site-footer {
   background: #111;
   color: #fff;

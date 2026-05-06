@@ -3,6 +3,9 @@
   -----------------------------------
   Edit upcoming events and approved reviews here.
 
+  If JavaScript fails, index.html still contains visible fallback events.
+  If JavaScript works, this file controls the events and reviews.
+
   EVENT DATE FORMAT:
   - Use YYYY-MM-DD for date-only events.
   - Use 24-hour time for startTime/endTime, like "20:00" for 8:00 PM.
@@ -70,7 +73,6 @@ const APPROVED_REVIEWS = [
   }
 ];
 
-// This is also included directly in index.html so the slideshow still works even if JavaScript fails.
 const SMUGMUG_SLIDESHOW = {
   enabled: true,
   title: "Mic Drop Moments",

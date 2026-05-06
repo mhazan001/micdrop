@@ -54,8 +54,7 @@ function renderEvents() {
   if (!container) return;
 
   if (typeof UPCOMING_EVENTS === "undefined" || !Array.isArray(UPCOMING_EVENTS)) {
-    container.innerHTML = '<p class="muted">No events are configured yet. Edit sitedata.js to add events.</p>';
-    return;
+    return; // Keep the visible fallback events already in the HTML.
   }
 
   const today = new Date();
@@ -66,8 +65,7 @@ function renderEvents() {
     .sort((a, b) => parseEventDate(a) - parseEventDate(b));
 
   if (!events.length) {
-    container.innerHTML = '<p class="muted">No upcoming events listed right now. Check back soon.</p>';
-    return;
+    return; // Keep fallback events instead of blanking the page.
   }
 
   container.innerHTML = events.map((event) => {
@@ -96,8 +94,7 @@ function renderReviews() {
   if (!container) return;
 
   if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || !APPROVED_REVIEWS.length) {
-    container.innerHTML = '<p class="muted">Reviews coming soon.</p>';
-    return;
+    return; // Keep fallback reviews.
   }
 
   container.innerHTML = APPROVED_REVIEWS.map((review) => {

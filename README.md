@@ -1,32 +1,21 @@
 # Mic Drop Karaoke website
 
-Upload all files in this package to the root of your GitHub Pages repo.
+This version is built so Events do not disappear.
 
-Root should contain:
+## Upload these files to the GitHub repo root
 
 - index.html
 - styles.css
 - script.js
 - sitedata.js
 - CNAME
+- README.md
 
-## Edit events
+The visible event cards are included directly in `index.html` as a fallback.
+The same dates are also in `sitedata.js`.
 
-Open `sitedata.js` and edit `UPCOMING_EVENTS`.
+## To change dates
 
-Use:
+Edit `sitedata.js` first.
 
-- `date: "YYYY-MM-DD"`
-- `startTime: "20:00"` for 8 PM
-- `endTime: "00:00"` for midnight
-- `isPrivate: true` for private booked dates
-
-## Booking form
-
-The booking form is already connected to Formspree:
-
-https://formspree.io/f/xwvaglkv
-
-## Photos
-
-The SmugMug slideshow is hardcoded directly in `index.html` so it does not depend on JavaScript to load.
+If you want absolute bulletproof matching fallback text too, also edit the event cards in `index.html`.

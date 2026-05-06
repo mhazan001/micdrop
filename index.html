@@ -56,10 +56,48 @@
           <h2>Upcoming Events</h2>
           <p>Catch Mic Drop Karaoke at public events or check dates already booked.</p>
         </div>
+
+        <!-- BULLETPROOF FALLBACK: These show even if JavaScript fails. -->
         <div id="events-list" class="event-list">
-          <noscript>
-            <p class="muted">JavaScript is required to show the event list.</p>
-          </noscript>
+          <article class="event-card">
+            <div class="event-date">Fri, May 15, 2026</div>
+            <div>
+              <h3>Karaoke Night at Audacious Aleworks</h3>
+              <p class="event-time">8 PM – 12 AM</p>
+              <p class="event-location">110 East Fairfax St, Falls Church, VA</p>
+              <p class="event-description">Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.</p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-date">Fri, June 12, 2026</div>
+            <div>
+              <h3>Karaoke Night at Audacious Aleworks</h3>
+              <p class="event-time">8 PM – 12 AM</p>
+              <p class="event-location">110 East Fairfax St, Falls Church, VA</p>
+              <p class="event-description">Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.</p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-date">Sat, June 27, 2026</div>
+            <div>
+              <h3>Karaoke Night at Clare and Don's Beach Shack</h3>
+              <p class="event-time">9 PM – 12 AM</p>
+              <p class="event-location">130 N Washington St, Falls Church, VA</p>
+              <p class="event-description">Come out for karaoke, beach-shack energy, and your next mic drop moment.</p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-date">Sat, July 18, 2026</div>
+            <div>
+              <h3>Karaoke Night at Clare and Don's Beach Shack</h3>
+              <p class="event-time">9 PM – 12 AM</p>
+              <p class="event-location">130 N Washington St, Falls Church, VA</p>
+              <p class="event-description">Come out for karaoke, beach-shack energy, and your next mic drop moment.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -143,7 +181,26 @@
           <p class="eyebrow">Reviews</p>
           <h2>What people are saying</h2>
         </div>
-        <div id="reviews-list" class="review-grid"></div>
+        <div id="reviews-list" class="review-grid">
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <blockquote>“Mic Drop Karaoke made our reception unforgettable. The energy was amazing and our guests are still talking about it.”</blockquote>
+            <div class="review-author">Sarah Mitchell</div>
+            <div class="review-type">Wedding Reception</div>
+          </article>
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <blockquote>“Great equipment, fantastic energy, and the team was incredibly easy to work with. It was the highlight of our event.”</blockquote>
+            <div class="review-author">James Chen</div>
+            <div class="review-type">Corporate Event</div>
+          </article>
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <blockquote>“Best decision ever for my birthday. Everyone had a blast, the song selection was great, and the setup was seamless.”</blockquote>
+            <div class="review-author">Emma Thompson</div>
+            <div class="review-type">Birthday Party</div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -190,7 +247,7 @@
 
   <footer class="site-footer">
     <div class="container footer-wrap">
-      <p>© <span id="current-year"></span> Mic Drop Karaoke. All rights reserved.</p>
+      <p>© <span id="current-year">2026</span> Mic Drop Karaoke. All rights reserved.</p>
       <a href="#top">Back to top</a>
     </div>
   </footer>
