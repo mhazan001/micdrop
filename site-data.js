@@ -17,31 +17,41 @@
 const UPCOMING_EVENTS = [
   {
     title: "Karaoke Night at Audacious Aleworks",
-    date: "2026-06-05",
+    date: "2026-05-15",
     startTime: "20:00",
     endTime: "00:00",
-    location: "Audacious Aleworks",
+    location: "110 East Fairfax St, Falls Church, VA",
     description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
     isPrivate: false
   },
   {
-    title: "Karaoke Night at Clare and Don’s",
+    title: "Karaoke Night at Audacious Aleworks",
     date: "2026-06-12",
-    startTime: "21:00",
+    startTime: "20:00",
     endTime: "00:00",
-    location: "Clare and Don’s Beach Shack",
+    location: "110 East Fairfax St, Falls Church, VA",
     description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
   },
   {
-    title: "Booked — Private Event",
-    date: "2026-06-20",
-    startTime: "",
-    endTime: "",
-    location: "Private Event",
-    description: "Mic Drop Karaoke is booked for a private event.",
-    isPrivate: true
+    title: "Karaoke Night at Clare and Don's Beach Shack",
+    date: "2026-06-27",
+    startTime: "21:00",
+    endTime: "00:00",
+    location: "130 N Washington St, Falls Church, VA",
+    description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
+    isPrivate: false
+  },
+  {
+    title: "Karaoke Night at Clare and Don's Beach Shack",
+    date: "2026-07-18",
+    startTime: "21:00",
+    endTime: "00:00",
+    location: "130 N Washington St, Falls Church, VA",
+    description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
+    isPrivate: false
   }
+  
 ];
 
 const APPROVED_REVIEWS = [
