@@ -1,6 +1,13 @@
 # Mic Drop Karaoke website
 
-This version is built so Events do not disappear.
+This version restores:
+
+- Pricing packages
+- Review submission form
+- Approved reviews display
+- Upcoming events
+- SmugMug slideshow
+- Booking form
 
 ## Upload these files to the GitHub repo root
 
@@ -11,11 +18,12 @@ This version is built so Events do not disappear.
 - CNAME
 - README.md
 
-The visible event cards are included directly in `index.html` as a fallback.
-The same dates are also in `sitedata.js`.
+## Edit events and approved reviews
 
-## To change dates
+Edit `sitedata.js`.
 
-Edit `sitedata.js` first.
+Reviews submitted through the website go to the same Formspree endpoint as the booking form, but include:
 
-If you want absolute bulletproof matching fallback text too, also edit the event cards in `index.html`.
+`form_type = Review Submission`
+
+Only copy approved reviews into `APPROVED_REVIEWS`.

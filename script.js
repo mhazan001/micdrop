@@ -54,7 +54,7 @@ function renderEvents() {
   if (!container) return;
 
   if (typeof UPCOMING_EVENTS === "undefined" || !Array.isArray(UPCOMING_EVENTS)) {
-    return; // Keep the visible fallback events already in the HTML.
+    return;
   }
 
   const today = new Date();
@@ -65,7 +65,7 @@ function renderEvents() {
     .sort((a, b) => parseEventDate(a) - parseEventDate(b));
 
   if (!events.length) {
-    return; // Keep fallback events instead of blanking the page.
+    return;
   }
 
   container.innerHTML = events.map((event) => {
@@ -94,7 +94,7 @@ function renderReviews() {
   if (!container) return;
 
   if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || !APPROVED_REVIEWS.length) {
-    return; // Keep fallback reviews.
+    return;
   }
 
   container.innerHTML = APPROVED_REVIEWS.map((review) => {
@@ -111,9 +111,9 @@ function renderReviews() {
   }).join("");
 }
 
-function setupBookingForm() {
-  const form = document.getElementById("booking-form");
-  const status = document.getElementById("form-status");
+function setupAjaxForm(formId, statusId, successMessage) {
+  const form = document.getElementById(formId);
+  const status = document.getElementById(statusId);
   if (!form || !status) return;
 
   form.addEventListener("submit", async (event) => {
@@ -130,14 +130,14 @@ function setupBookingForm() {
 
       if (response.ok) {
         form.reset();
-        status.textContent = "Thanks! Your booking request was sent.";
+        status.textContent = successMessage;
         status.className = "form-status success";
       } else {
-        status.textContent = "Something went wrong. Please try again or email us directly.";
+        status.textContent = "Something went wrong. Please try again.";
         status.className = "form-status error";
       }
     } catch (error) {
-      status.textContent = "Something went wrong. Please try again or email us directly.";
+      status.textContent = "Something went wrong. Please try again.";
       status.className = "form-status error";
     }
   });
@@ -163,7 +163,8 @@ function initSite() {
 
   renderEvents();
   renderReviews();
-  setupBookingForm();
+  setupAjaxForm("booking-form", "form-status", "Thanks! Your booking request was sent.");
+  setupAjaxForm("review-form", "review-status", "Thanks! Your review was submitted for approval.");
   setupMobileNav();
 }
 

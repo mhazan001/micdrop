@@ -1,16 +1,18 @@
 /*
   Mic Drop Karaoke website content file
   -----------------------------------
-  Edit upcoming events and approved reviews here.
-
-  If JavaScript fails, index.html still contains visible fallback events.
-  If JavaScript works, this file controls the events and reviews.
+  This is the main place to add/remove upcoming events and approved reviews.
+  You can edit this file directly in GitHub.
 
   EVENT DATE FORMAT:
   - Use YYYY-MM-DD for date-only events.
   - Use 24-hour time for startTime/endTime, like "20:00" for 8:00 PM.
-  - For events that end at midnight, use "00:00".
   - Set isPrivate: true for booked/private dates you want visible without details.
+
+  REVIEW RULE:
+  - Reviews submitted through the website are sent to Formspree first.
+  - Only add reviews here after you approve them.
+  - To remove a review, delete its block from APPROVED_REVIEWS.
 */
 
 const UPCOMING_EVENTS = [
@@ -29,7 +31,7 @@ const UPCOMING_EVENTS = [
     startTime: "20:00",
     endTime: "00:00",
     location: "110 East Fairfax St, Falls Church, VA",
-    description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
+    description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
   },
   {

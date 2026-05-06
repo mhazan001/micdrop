@@ -57,7 +57,6 @@
           <p>Catch Mic Drop Karaoke at public events or check dates already booked.</p>
         </div>
 
-        <!-- BULLETPROOF FALLBACK: These show even if JavaScript fails. -->
         <div id="events-list" class="event-list">
           <article class="event-card">
             <div class="event-date">Fri, May 15, 2026</div>
@@ -75,7 +74,7 @@
               <h3>Karaoke Night at Audacious Aleworks</h3>
               <p class="event-time">8 PM – 12 AM</p>
               <p class="event-location">110 East Fairfax St, Falls Church, VA</p>
-              <p class="event-description">Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.</p>
+              <p class="event-description">Come out for karaoke, beach-shack energy, and your next mic drop moment.</p>
             </div>
           </article>
 
@@ -132,46 +131,53 @@
     <section id="packages" class="section packages-section">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">How It Works</p>
-          <h2>Karaoke made easy</h2>
-          <p>We make it simple to bring professional karaoke entertainment to your event.</p>
+          <p class="eyebrow">Packages</p>
+          <h2>Karaoke packages for every kind of event</h2>
+          <p>Choose the setup that fits your venue, crowd, and event length.</p>
         </div>
-        <div class="card-grid">
-          <article class="info-card">
-            <div class="card-number">1</div>
-            <h3>Tell us about your event</h3>
-            <p>Send the date, location, timing, and event type. We’ll help match the setup to your crowd.</p>
+
+        <div class="card-grid pricing-grid">
+          <article class="info-card pricing-card">
+            <h3>Basic Mic Drop</h3>
+            <p class="price">Starting at $350</p>
+            <p>Great for smaller private parties, casual gatherings, and lower-key events.</p>
+            <ul>
+              <li>Up to 2 hours of karaoke</li>
+              <li>Professional karaoke hosting</li>
+              <li>Speaker and microphone setup</li>
+              <li>Large song selection</li>
+            </ul>
           </article>
-          <article class="info-card">
-            <div class="card-number">2</div>
-            <h3>We bring the setup</h3>
-            <p>We arrive with karaoke-ready equipment, song access, and hosts who keep the night moving.</p>
+
+          <article class="info-card pricing-card featured">
+            <div class="featured-label">Most Popular</div>
+            <h3>Classic Mic Drop</h3>
+            <p class="price">Starting at $500</p>
+            <p>Best for bars, restaurants, birthdays, fundraisers, and most private events.</p>
+            <ul>
+              <li>Up to 3 hours of karaoke</li>
+              <li>Professional host/emcee</li>
+              <li>Sound system and microphones</li>
+              <li>Song request support</li>
+              <li>Crowd engagement and announcements</li>
+            </ul>
           </article>
-          <article class="info-card">
-            <div class="card-number">3</div>
-            <h3>You enjoy the show</h3>
-            <p>Your guests sing, laugh, cheer, and create the kind of night everyone remembers.</p>
+
+          <article class="info-card pricing-card">
+            <h3>Ultimate Mic Drop</h3>
+            <p class="price">Starting at $750</p>
+            <p>For bigger events, longer nights, premium setups, or high-energy venue events.</p>
+            <ul>
+              <li>Up to 4 hours of karaoke</li>
+              <li>Premium hosting experience</li>
+              <li>Enhanced sound setup</li>
+              <li>Multiple microphones</li>
+              <li>Event coordination support</li>
+            </ul>
           </article>
         </div>
 
-        <div class="section-heading packages-heading">
-          <p class="eyebrow">Packages</p>
-          <h2>Great for all kinds of events</h2>
-        </div>
-        <div class="card-grid">
-          <article class="info-card">
-            <h3>Bar & Restaurant Nights</h3>
-            <p>Bring in a crowd, keep guests engaged, and create a repeatable entertainment night.</p>
-          </article>
-          <article class="info-card">
-            <h3>Private Parties</h3>
-            <p>Birthdays, backyard parties, celebrations, and family gatherings with a professional karaoke experience.</p>
-          </article>
-          <article class="info-card">
-            <h3>Fundraisers & Community Events</h3>
-            <p>Fun, approachable entertainment for schools, boosters, community groups, and local organizations.</p>
-          </article>
-        </div>
+        <p class="pricing-note">Final pricing may vary based on location, event length, setup needs, and special requests.</p>
       </div>
     </section>
 
@@ -180,7 +186,9 @@
         <div class="section-heading">
           <p class="eyebrow">Reviews</p>
           <h2>What people are saying</h2>
+          <p>Read approved reviews, or submit your own Mic Drop moment below.</p>
         </div>
+
         <div id="reviews-list" class="review-grid">
           <article class="review-card">
             <div class="review-stars">★★★★★</div>
@@ -200,6 +208,53 @@
             <div class="review-author">Emma Thompson</div>
             <div class="review-type">Birthday Party</div>
           </article>
+        </div>
+
+        <div class="review-submit-card">
+          <div>
+            <p class="eyebrow">Leave a Review</p>
+            <h3>Had a mic drop moment?</h3>
+            <p>Send us your review. We’ll review it first, then add approved reviews to the website.</p>
+          </div>
+
+          <form id="review-form" class="review-form" action="https://formspree.io/f/xwvaglkv" method="POST">
+            <input type="hidden" name="_subject" value="New Mic Drop Karaoke review submission" />
+            <input type="hidden" name="form_type" value="Review Submission" />
+
+            <label>
+              Your Name
+              <input type="text" name="reviewer_name" required />
+            </label>
+
+            <label>
+              Event Type
+              <input type="text" name="event_type" placeholder="Birthday, bar night, fundraiser, private party..." />
+            </label>
+
+            <label>
+              Rating
+              <select name="rating" required>
+                <option value="5">★★★★★ 5 stars</option>
+                <option value="4">★★★★ 4 stars</option>
+                <option value="3">★★★ 3 stars</option>
+                <option value="2">★★ 2 stars</option>
+                <option value="1">★ 1 star</option>
+              </select>
+            </label>
+
+            <label>
+              Review
+              <textarea name="review" rows="5" placeholder="Tell us what made the event great." required></textarea>
+            </label>
+
+            <label>
+              Email <span class="optional">(not published)</span>
+              <input type="email" name="email" placeholder="So we can follow up if needed" />
+            </label>
+
+            <button class="button primary" type="submit">Submit Review</button>
+            <p id="review-status" class="form-status" role="status"></p>
+          </form>
         </div>
       </div>
     </section>
@@ -238,6 +293,7 @@
             <textarea name="message" rows="5" placeholder="Tell us location, expected guests, timing, and anything else we should know." required></textarea>
           </label>
           <input type="hidden" name="_subject" value="New Mic Drop Karaoke booking request" />
+          <input type="hidden" name="form_type" value="Booking Request" />
           <button class="button primary" type="submit">Request Booking</button>
           <p id="form-status" class="form-status" role="status"></p>
         </form>
