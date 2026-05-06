@@ -649,3 +649,104 @@ h3 {
 .review-scroll.is-paused {
   cursor: default;
 }
+
+
+/* Venue logos in upcoming events */
+.event-branding {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.event-logo {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #ececec;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 0.35rem;
+}
+
+@media (max-width: 840px) {
+  .event-branding {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .event-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+  }
+}
+
+
+/* Reliable auto-scrolling reviews - hides scrollbar completely */
+.review-marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 0.25rem 0 1.25rem;
+}
+
+.review-marquee-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  animation: reviewMarquee 36s linear infinite;
+  will-change: transform;
+}
+
+.review-marquee:hover .review-marquee-track,
+.review-marquee:focus-within .review-marquee-track {
+  animation-play-state: paused;
+}
+
+.review-marquee .review-card {
+  flex: 0 0 340px;
+  min-height: 100%;
+}
+
+@keyframes reviewMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.625rem));
+  }
+}
+
+/* Hide any old horizontal scrollbar behavior if cached CSS/classes remain */
+.review-scroll,
+.review-scroll.auto-scroll-ready {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+
+.review-scroll::-webkit-scrollbar,
+.review-marquee::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  .review-marquee-track {
+    animation-duration: 42s;
+  }
+
+  .review-marquee .review-card {
+    flex-basis: 82vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-marquee-track {
+    animation: none;
+  }
+
+  .review-marquee {
+    overflow-x: auto;
+  }
+}

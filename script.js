@@ -143,6 +143,26 @@ function createGoogleCalendarUrl(event) {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+function getVenueLogo(event) {
+  const haystack = `${event.title || ""} ${event.location || ""}`.toLowerCase();
+
+  if (haystack.includes("audacious")) {
+    return {
+      src: "audacious-aleworks-logo.jpg",
+      alt: "Audacious Aleworks logo"
+    };
+  }
+
+  if (haystack.includes("clare")) {
+    return {
+      src: "clare-dons-logo.png",
+      alt: "Clare and Don's Beach Shack logo"
+    };
+  }
+
+  return null;
+}
+
 function createCalendarButtons(event) {
   if (!event || !event.date || event.isPrivate) return "";
 
@@ -176,14 +196,21 @@ function renderEvents() {
       ? "Mic Drop Karaoke is booked for a private event."
       : (event.description || "");
 
+    const venueLogo = getVenueLogo(event);
+
     return `
       <article class="event-card">
         <div class="event-date">${escapeHtml(formatDate(event.date))}</div>
         <div>
-          <h3>${escapeHtml(event.title || "Mic Drop Karaoke Event")}</h3>
-          ${formatEventTime(event) ? `<p class="event-time">${escapeHtml(formatEventTime(event))}</p>` : ""}
-          ${location ? `<p class="event-location">${escapeHtml(location)}</p>` : ""}
-          ${description ? `<p class="event-description">${escapeHtml(description)}</p>` : ""}
+          <div class="event-branding">
+            ${venueLogo ? `<img class="event-logo" src="${escapeHtml(venueLogo.src)}" alt="${escapeHtml(venueLogo.alt)}" />` : ""}
+            <div>
+              <h3>${escapeHtml(event.title || "Mic Drop Karaoke Event")}</h3>
+              ${formatEventTime(event) ? `<p class="event-time">${escapeHtml(formatEventTime(event))}</p>` : ""}
+              ${location ? `<p class="event-location">${escapeHtml(location)}</p>` : ""}
+              ${description ? `<p class="event-description">${escapeHtml(description)}</p>` : ""}
+            </div>
+          </div>
           ${event.isPrivate ? '<span class="private-pill">Booked</span>' : createCalendarButtons(event)}
         </div>
       </article>
@@ -201,64 +228,28 @@ function renderReviews() {
     ? [...APPROVED_REVIEWS, ...APPROVED_REVIEWS]
     : [...APPROVED_REVIEWS];
 
-  container.innerHTML = reviewsToRender.map((review) => {
-    const rating = Number(review.rating || 5);
-    const stars = "★".repeat(Math.max(1, Math.min(5, rating)));
-    return `
-      <article class="review-card">
-        <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
-        <blockquote>“${escapeHtml(review.quote || "")}”</blockquote>
-        <div class="review-author">${escapeHtml(review.name || "Mic Drop Karaoke Customer")}</div>
-        <div class="review-type">${escapeHtml(review.eventType || "")}</div>
-      </article>
-    `;
-  }).join("");
+  container.innerHTML = `
+    <div class="review-marquee-track">
+      ${reviewsToRender.map((review) => {
+        const rating = Number(review.rating || 5);
+        const stars = "★".repeat(Math.max(1, Math.min(5, rating)));
+        return `
+          <article class="review-card">
+            <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
+            <blockquote>“${escapeHtml(review.quote || "")}”</blockquote>
+            <div class="review-author">${escapeHtml(review.name || "Mic Drop Karaoke Customer")}</div>
+            <div class="review-type">${escapeHtml(review.eventType || "")}</div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
 }
 
 function setupReviewAutoScroll() {
   const container = document.getElementById("reviews-list");
   if (!container) return;
-  if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS)) return;
-  if (APPROVED_REVIEWS.length <= 1) return;
-
-  let isPaused = false;
-  let animationFrameId = null;
-  const speed = 0.35;
-
-  function pauseScroll() {
-    isPaused = true;
-    container.classList.add("is-paused");
-  }
-
-  function resumeScroll() {
-    isPaused = false;
-    container.classList.remove("is-paused");
-  }
-
-  function step() {
-    if (!isPaused) {
-      container.scrollLeft += speed;
-      const halfwayPoint = container.scrollWidth / 2;
-      if (container.scrollLeft >= halfwayPoint) {
-        container.scrollLeft = 0;
-      }
-    }
-    animationFrameId = window.requestAnimationFrame(step);
-  }
-
-  container.addEventListener("mouseenter", pauseScroll);
-  container.addEventListener("mouseleave", resumeScroll);
-  container.addEventListener("focusin", pauseScroll);
-  container.addEventListener("focusout", resumeScroll);
-  container.addEventListener("touchstart", pauseScroll, { passive: true });
-  container.addEventListener("touchend", resumeScroll, { passive: true });
-  container.addEventListener("pointerdown", pauseScroll);
-  container.addEventListener("pointerup", resumeScroll);
-
-  if (animationFrameId) {
-    window.cancelAnimationFrame(animationFrameId);
-  }
-  animationFrameId = window.requestAnimationFrame(step);
+  container.classList.add("auto-scroll-ready");
 }
 function setupAjaxForm(formId, statusId, successMessage) {
   const form = document.getElementById(formId);

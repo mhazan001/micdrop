@@ -50,3 +50,21 @@ Behavior:
 - Auto-scrolls continuously
 - Pauses when a visitor hovers, clicks, or touches the reviews
 - Visitors can still manually drag/scroll sideways
+
+
+## Venue logos in Upcoming Events
+
+Public event cards now show venue logos:
+
+- Audacious Aleworks logo (from your uploaded image)
+- Clare & Don's Beach Shack logo (cropped from the official site artwork)
+
+Files included:
+- audacious-aleworks-logo.jpg
+- clare-dons-logo.png
+
+
+## Review auto-scroll fix
+
+Reviews now use CSS marquee-style auto-scroll instead of relying on browser scroll position.
+The scrollbar is hidden, and the animation pauses on hover/focus.
