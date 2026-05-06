@@ -1,231 +1,161 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mic Drop Karaoke | Karaoke Events & Private Parties</title>
-  <meta name="description" content="Mic Drop Karaoke brings high-energy karaoke hosting, music, and fun to private parties, corporate events, restaurants, bars, and community celebrations." />
-  <meta property="og:title" content="Mic Drop Karaoke" />
-  <meta property="og:description" content="Unforgettable karaoke experiences for private parties, corporate events, and special celebrations." />
-  <meta property="og:type" content="website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Mic Drop Karaoke brings high-energy karaoke hosting, professional sound, and unforgettable karaoke fun to private parties, bars, restaurants, fundraisers, and community events." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Mic Drop Karaoke home">
-      <span class="brand-icon">🎤</span>
-      <span>Mic Drop Karaoke</span>
-    </a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">☰</button>
-    <nav id="site-nav" class="site-nav">
-      <a href="#packages">Packages</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#events">Events</a>
-      <a href="#photos">Photos</a>
-      <a href="#upcoming-events">Event Dates</a>
-      <a href="#testimonials">Reviews</a>
-      <a class="nav-cta" href="#book">Book Now</a>
-    </nav>
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="Mic Drop Karaoke home">
+        <span class="brand-mark">🎤</span>
+        <span>Mic Drop Karaoke</span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#events">Events</a>
+        <a href="#photos">Photos</a>
+        <a href="#packages">Packages</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#booking">Book Us</a>
+      </nav>
+    </div>
   </header>
 
   <main id="top">
-    <section class="hero section-pad">
-      <div class="hero-copy">
-        <p class="eyebrow">Private parties • Corporate events • Restaurants • Community events</p>
-        <h1>Mic Drop Karaoke</h1>
-        <p class="hero-text">Turn your next night out, private party, or special event into a full-on singalong celebration.</p>
-        <p class="hero-subtext">We bring the sound, the hosting, the energy, and the “you had to be there” moments.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#book">Book Your Event</a>
-          <a class="button secondary" href="#upcoming-events">See Event Dates</a>
-        </div>
-      </div>
-      <div class="hero-art" aria-label="Karaoke stage with microphone and lights" role="img">
-        <div class="spotlight spotlight-one"></div>
-        <div class="spotlight spotlight-two"></div>
-        <div class="stage-card">
-          <div class="record"></div>
-          <div class="mic-stand">
-            <div class="mic-head"></div>
-            <div class="mic-body"></div>
-            <div class="mic-pole"></div>
-            <div class="mic-base"></div>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Karaoke hosting • Private parties • Local events</p>
+          <h1>Turn any night into a mic drop moment.</h1>
+          <p class="hero-text">Mic Drop Karaoke brings the sound, the energy, and the crowd-friendly hosting that gets people singing, laughing, and staying longer.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#booking">Request Booking</a>
+            <a class="button secondary" href="#events">See Upcoming Events</a>
           </div>
-          <div class="equalizer"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="hero-card" aria-label="Mic Drop Karaoke highlights">
+          <h2>We bring the party.</h2>
+          <ul>
+            <li>Professional karaoke setup</li>
+            <li>Fun, energetic hosts</li>
+            <li>Huge song selection</li>
+            <li>Great for bars, restaurants, fundraisers, birthdays, and private events</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section id="how-it-works" class="section-pad light-section">
-      <div class="section-heading">
-        <p class="eyebrow">How It Works</p>
-        <h2>From booking to party, we make it simple</h2>
-      </div>
-      <div class="steps-grid">
-        <article class="step-card">
-          <span class="step-number">1</span>
-          <h3>Tell Us About the Event</h3>
-          <p>Share the date, venue, crowd size, and vibe you want.</p>
-        </article>
-        <article class="step-card">
-          <span class="step-number">2</span>
-          <h3>We Confirm the Details</h3>
-          <p>We align on timing, setup needs, and the right karaoke experience.</p>
-        </article>
-        <article class="step-card">
-          <span class="step-number">3</span>
-          <h3>We Bring the Party</h3>
-          <p>We arrive, set up, host, and keep the crowd engaged all night.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="packages" class="section-pad">
-      <div class="section-heading">
-        <p class="eyebrow">Packages</p>
-        <h2>Pick the right setup for your crowd</h2>
-      </div>
-      <div class="pricing-grid">
-        <article class="price-card">
-          <h3>Party Starter</h3>
-          <p class="card-subtitle">Great for smaller gatherings and casual celebrations.</p>
-          <ul>
-            <li>Professional sound setup</li>
-            <li>Karaoke hosting</li>
-            <li>Huge song library</li>
-            <li>Setup and takedown included</li>
-          </ul>
-          <a class="button secondary full" href="#book" data-package="Party Starter">Ask About Party Starter</a>
-        </article>
-        <article class="price-card featured">
-          <span class="badge">Most Popular</span>
-          <h3>Showstopper</h3>
-          <p class="card-subtitle">The full Mic Drop Karaoke experience for bars, restaurants, and private events.</p>
-          <ul>
-            <li>Professional microphones and speakers</li>
-            <li>Energetic karaoke hosting</li>
-            <li>Event flow support</li>
-            <li>Perfect for public or private events</li>
-          </ul>
-          <a class="button primary full" href="#book" data-package="Showstopper">Ask About Showstopper</a>
-        </article>
-        <article class="price-card">
-          <h3>Custom Event</h3>
-          <p class="card-subtitle">For corporate events, fundraisers, community events, and special requests.</p>
-          <ul>
-            <li>Custom timing and format</li>
-            <li>Venue coordination support</li>
-            <li>Great for large groups</li>
-            <li>Flexible event planning</li>
-          </ul>
-          <a class="button secondary full" href="#book" data-package="Custom Event">Ask About Custom Event</a>
-        </article>
-      </div>
-    </section>
-
-    <section id="events" class="section-pad split-section">
-      <div>
-        <p class="eyebrow">Perfect for Any Celebration</p>
-        <h2>Big energy for every kind of crowd</h2>
-        <p>Whether it’s a birthday party, restaurant karaoke night, corporate event, fundraiser, or community celebration, Mic Drop Karaoke brings people together through music, laughter, and unforgettable moments.</p>
-      </div>
-      <div class="event-tags" aria-label="Event types">
-        <span>Private Parties</span>
-        <span>Restaurants & Bars</span>
-        <span>Birthdays</span>
-        <span>Corporate Events</span>
-        <span>Fundraisers</span>
-        <span>Community Nights</span>
-      </div>
-    </section>
-
-    <section id="photos" class="section-pad photos-section">
-      <div class="section-heading">
-        <p class="eyebrow">Event Photos</p>
-        <h2 id="photos-title">Mic Drop Moments</h2>
-        <p id="photos-subtitle">Photos from our karaoke nights, private parties, and community events.</p>
-      </div>
-      <div class="smugmug-slideshow-wrap" id="smugmug-slideshow"></div>
-    </section>
-
-    <section id="upcoming-events" class="section-pad light-section upcoming-events-section">
-      <div class="section-heading">
-        <p class="eyebrow">Upcoming Event Dates</p>
-        <h2>Where we’ll be next</h2>
-        <p>Upcoming public events and booked dates. Edit these in <strong>sitedata.js</strong>.</p>
-      </div>
-      <div class="events-card">
-        <div id="events-empty" class="events-state hidden">
-          <h3>No upcoming events posted yet</h3>
-          <p>Ask about your preferred date and we’ll check availability.</p>
-          <a class="button primary" href="#book">Ask About a Date</a>
+    <section id="events" class="section events-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Upcoming Dates</p>
+          <h2>Upcoming Events</h2>
+          <p>Catch Mic Drop Karaoke at public events or check dates already booked.</p>
         </div>
-        <div id="events-list" class="events-list" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section id="testimonials" class="section-pad">
-      <div class="section-heading">
-        <p class="eyebrow">Reviews</p>
-        <h2>What people are saying</h2>
-      </div>
-      <div id="reviews-list" class="testimonial-grid"></div>
-    </section>
-
-    <section id="book" class="section-pad booking-section">
-      <div class="booking-card">
-        <div class="section-heading left">
-          <p class="eyebrow">Ready to Mic Drop?</p>
-          <h2>Tell us about your event and we’ll handle the rest.</h2>
+        <div id="events-list" class="event-list">
+          <p class="muted">Loading upcoming events…</p>
         </div>
-        <form id="booking-form" method="POST">
-          <input type="text" name="_gotcha" class="hidden-field" tabindex="-1" autocomplete="off" />
+      </div>
+    </section>
+
+    <section id="photos" class="section photos-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Event Photos</p>
+          <h2 id="photos-title">Mic Drop Moments</h2>
+          <p id="photos-subtitle">Photos from our karaoke nights, private parties, and community events.</p>
+        </div>
+        <div class="smugmug-slideshow-wrap" id="smugmug-slideshow">
+          <p class="muted">Loading photos…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="packages" class="section packages-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">How We Help</p>
+          <h2>Karaoke for almost any occasion</h2>
+          <p>From casual bar nights to private celebrations, Mic Drop Karaoke helps create the kind of night people remember.</p>
+        </div>
+        <div class="card-grid">
+          <article class="info-card">
+            <h3>Bar & Restaurant Nights</h3>
+            <p>Bring in a crowd, keep guests engaged, and create a repeatable entertainment night.</p>
+          </article>
+          <article class="info-card">
+            <h3>Private Parties</h3>
+            <p>Birthdays, backyard parties, celebrations, and family gatherings with a professional karaoke experience.</p>
+          </article>
+          <article class="info-card">
+            <h3>Fundraisers & Community Events</h3>
+            <p>Fun, approachable entertainment for schools, boosters, community groups, and local organizations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section reviews-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Reviews</p>
+          <h2>What people are saying</h2>
+        </div>
+        <div id="reviews-list" class="review-grid">
+          <p class="muted">Loading reviews…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking" class="section booking-section">
+      <div class="container booking-grid">
+        <div>
+          <p class="eyebrow">Book Mic Drop Karaoke</p>
+          <h2>Tell us about your event.</h2>
+          <p>Send the details and we’ll follow up to confirm availability, setup needs, and pricing.</p>
+        </div>
+
+        <form id="booking-form" class="booking-form" action="https://formspree.io/f/xwvaglkv" method="POST">
+          <label>
+            Name
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Phone
+            <input type="tel" name="phone" />
+          </label>
+          <label>
+            Event Date
+            <input type="date" name="event_date" />
+          </label>
+          <label>
+            Event Type
+            <input type="text" name="event_type" placeholder="Birthday, bar night, fundraiser, private party..." />
+          </label>
+          <label>
+            Message
+            <textarea name="message" rows="5" placeholder="Tell us location, expected guests, timing, and anything else we should know." required></textarea>
+          </label>
           <input type="hidden" name="_subject" value="New Mic Drop Karaoke booking request" />
-          <div class="form-grid">
-            <label>Your Name *<input required name="name" type="text" autocomplete="name" /></label>
-            <label>Email Address *<input required name="email" type="email" autocomplete="email" /></label>
-            <label>Phone Number *<input required name="phone" type="tel" autocomplete="tel" /></label>
-            <label>Event Type *
-              <select required name="eventType">
-                <option value="">Select an event type</option>
-                <option>Private Party</option>
-                <option>Restaurant / Bar Karaoke Night</option>
-                <option>Corporate Event</option>
-                <option>Birthday Party</option>
-                <option>Fundraiser</option>
-                <option>Community Event</option>
-                <option>Other</option>
-              </select>
-            </label>
-            <label>Preferred Package<select name="package"><option value="">Not sure yet</option><option>Party Starter</option><option>Showstopper</option><option>Custom Event</option></select></label>
-            <label>Event Date *<input required name="date" type="date" /></label>
-            <label class="full-span">Location / Venue *<input required name="location" type="text" /></label>
-            <label class="full-span">Event Details &amp; Special Requests<textarea name="details" rows="5"></textarea></label>
-          </div>
           <button class="button primary" type="submit">Request Booking</button>
-          <p class="form-note">Your request will be sent securely through Formspree.</p>
-          <p id="form-status" role="status" aria-live="polite"></p>
+          <p id="form-status" class="form-status" role="status"></p>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div>
-      <h3>Mic Drop Karaoke</h3>
-      <p>Unforgettable karaoke experiences for every event.</p>
+    <div class="container footer-wrap">
+      <p>© <span id="current-year"></span> Mic Drop Karaoke. All rights reserved.</p>
+      <a href="#top">Back to top</a>
     </div>
-    <nav>
-      <a href="#packages">Packages</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#photos">Photos</a>
-      <a href="#upcoming-events">Event Dates</a>
-      <a href="#book">Book Now</a>
-    </nav>
-    <p class="copyright">© 2026 Mic Drop Karaoke. All rights reserved.</p>
   </footer>
 
   <script src="sitedata.js"></script>

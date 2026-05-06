@@ -1,173 +1,103 @@
-// Mic Drop Karaoke site behavior
-// This file reads editable data from sitedata.js:
-// - UPCOMING_EVENTS
-// - APPROVED_REVIEWS
-// - SMUGMUG_SLIDESHOW
-
-const FORM_ENDPOINT = "https://formspree.io/f/xwvaglkv";
-
-const menuButton = document.querySelector(".menu-toggle");
-const nav = document.querySelector("#site-nav");
-
-menuButton?.addEventListener("click", () => {
-  const isOpen = nav.classList.toggle("open");
-  menuButton.setAttribute("aria-expanded", String(isOpen));
-});
-
-document.querySelectorAll("#site-nav a").forEach((link) => {
-  link.addEventListener("click", () => {
-    nav?.classList.remove("open");
-    menuButton?.setAttribute("aria-expanded", "false");
-  });
-});
-
-document.querySelectorAll("[data-package]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const packageSelect = document.querySelector('select[name="package"]');
-    if (packageSelect) packageSelect.value = button.dataset.package;
-    document.querySelector("#book")?.scrollIntoView({ behavior: "smooth" });
-  });
-});
-
-const form = document.querySelector("#booking-form");
-const status = document.querySelector("#form-status");
-
-form?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalText = submitButton.textContent;
-  submitButton.disabled = true;
-  submitButton.textContent = "Sending...";
-  status.textContent = "Sending your booking request...";
-
-  try {
-    const data = new FormData(form);
-
-    const response = await fetch(FORM_ENDPOINT, {
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" }
-    });
-
-    if (!response.ok) throw new Error("Form service rejected the submission.");
-
-    form.reset();
-    status.textContent = "Thanks! Your booking request was sent. We’ll get back to you soon.";
-  } catch (error) {
-    console.error(error);
-    status.textContent = "Sorry, the form could not be sent. Please try again or email us directly.";
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalText;
-  }
-});
-
 function parseEventDate(event) {
-  const [year, month, day] = event.date.split("-").map(Number);
-  return new Date(year, month - 1, day);
+  const date = event.date || "";
+  const time = event.startTime || "00:00";
+  return new Date(`${date}T${time}:00`);
 }
 
-function formatEventDate(dateString) {
-  const date = parseEventDate({ date: dateString });
-  return {
-    month: date.toLocaleDateString("en-US", { month: "short" }),
-    day: date.toLocaleDateString("en-US", { day: "numeric" }),
-    year: date.toLocaleDateString("en-US", { year: "numeric" }),
-    full: date.toLocaleDateString("en-US", { weekday: "short", month: "long", day: "numeric", year: "numeric" })
-  };
+function formatDate(dateString) {
+  const date = new Date(`${dateString}T12:00:00`);
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
 }
 
-function formatTime(time) {
-  if (!time) return "";
-  const [hours, minutes] = time.split(":").map(Number);
+function formatTime(timeString) {
+  if (!timeString) return "";
+  const [hourRaw, minuteRaw] = timeString.split(":");
+  const hour = Number(hourRaw);
+  const minute = Number(minuteRaw || "0");
   const date = new Date();
-  date.setHours(hours, minutes || 0, 0, 0);
-  return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  date.setHours(hour, minute, 0, 0);
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: minute === 0 ? undefined : "2-digit"
+  });
 }
 
 function formatEventTime(event) {
-  if (!event.startTime && !event.endTime) return "Time TBD";
-  if (event.startTime && !event.endTime) return formatTime(event.startTime);
-  return `${formatTime(event.startTime)} – ${formatTime(event.endTime)}`;
+  if (!event.startTime && !event.endTime) return "";
+  const start = formatTime(event.startTime);
+  const end = formatTime(event.endTime);
+  if (start && end) return `${start} – ${end}`;
+  return start || end;
 }
 
-function isFutureOrToday(event) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const eventDate = parseEventDate(event);
-  eventDate.setHours(0, 0, 0, 0);
-  return eventDate >= today;
-}
+function renderEvents() {
+  const container = document.getElementById("events-list");
+  if (!container) return;
 
-function renderUpcomingEvents() {
-  const list = document.getElementById("events-list");
-  const empty = document.getElementById("events-empty");
-  if (!list) return;
-
-  const events = Array.isArray(window.UPCOMING_EVENTS || UPCOMING_EVENTS)
-    ? (window.UPCOMING_EVENTS || UPCOMING_EVENTS)
-    : [];
-
-  const upcoming = events
-    .filter((event) => event.date && isFutureOrToday(event))
-    .sort((a, b) => parseEventDate(a) - parseEventDate(b));
-
-  list.innerHTML = "";
-
-  if (!upcoming.length) {
-    empty?.classList.remove("hidden");
+  if (typeof UPCOMING_EVENTS === "undefined" || !Array.isArray(UPCOMING_EVENTS)) {
+    container.innerHTML = '<p class="muted">No events are configured yet.</p>';
     return;
   }
 
-  empty?.classList.add("hidden");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  upcoming.forEach((event) => {
-    const dateParts = formatEventDate(event.date);
-    const title = event.isPrivate ? "Booked — Private Event" : event.title;
-    const location = event.isPrivate ? "" : event.location;
+  const events = UPCOMING_EVENTS
+    .filter((event) => event && event.date && parseEventDate(event) >= today)
+    .sort((a, b) => parseEventDate(a) - parseEventDate(b));
+
+  if (!events.length) {
+    container.innerHTML = '<p class="muted">No upcoming events listed right now. Check back soon.</p>';
+    return;
+  }
+
+  container.innerHTML = events.map((event) => {
+    const location = event.isPrivate ? "" : (event.location || "");
     const description = event.isPrivate
       ? "Mic Drop Karaoke is booked for a private event."
-      : event.description;
+      : (event.description || "");
 
-    const card = document.createElement("article");
-    card.className = "event-card";
-    card.innerHTML = `
-      <div class="event-date-badge" aria-hidden="true">
-        <span class="month">${dateParts.month}</span>
-        <span class="day">${dateParts.day}</span>
-        <span class="year">${dateParts.year}</span>
-      </div>
-      <div class="event-details">
-        <h3>${title || "Mic Drop Karaoke Event"}</h3>
-        <p class="event-meta">${dateParts.full} · ${formatEventTime(event)}${location ? ` · ${location}` : ""}</p>
-        ${description ? `<p class="event-description">${description}</p>` : ""}
-      </div>
+    return `
+      <article class="event-card">
+        <div class="event-date">${formatDate(event.date)}</div>
+        <div>
+          <h3>${event.title || "Mic Drop Karaoke Event"}</h3>
+          ${formatEventTime(event) ? `<p class="event-time">${formatEventTime(event)}</p>` : ""}
+          ${location ? `<p class="event-location">${location}</p>` : ""}
+          ${description ? `<p class="event-description">${description}</p>` : ""}
+          ${event.isPrivate ? '<span class="private-pill">Booked</span>' : ""}
+        </div>
+      </article>
     `;
-    list.appendChild(card);
-  });
+  }).join("");
 }
 
 function renderReviews() {
   const container = document.getElementById("reviews-list");
   if (!container) return;
 
-  const reviews = Array.isArray(window.APPROVED_REVIEWS || APPROVED_REVIEWS)
-    ? (window.APPROVED_REVIEWS || APPROVED_REVIEWS)
-    : [];
+  if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || !APPROVED_REVIEWS.length) {
+    container.innerHTML = '<p class="muted">Reviews coming soon.</p>';
+    return;
+  }
 
-  container.innerHTML = "";
-
-  reviews.forEach((review) => {
-    const stars = "★".repeat(review.rating || 5);
-    const block = document.createElement("blockquote");
-    block.innerHTML = `
-      <p class="stars" aria-label="${review.rating || 5} star review">${stars}</p>
-      <p>“${review.quote}”</p>
-      <footer>${review.name || "Guest"} <span>${review.eventType || "Event"}</span></footer>
+  container.innerHTML = APPROVED_REVIEWS.map((review) => {
+    const rating = Number(review.rating || 5);
+    const stars = "★".repeat(Math.max(1, Math.min(5, rating)));
+    return `
+      <article class="review-card">
+        <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
+        <blockquote>“${review.quote || ""}”</blockquote>
+        <div class="review-author">${review.name || "Mic Drop Karaoke Customer"}</div>
+        <div class="review-type">${review.eventType || ""}</div>
+      </article>
     `;
-    container.appendChild(block);
-  });
+  }).join("");
 }
 
 function renderSmugMugSlideshow() {
@@ -177,29 +107,67 @@ function renderSmugMugSlideshow() {
 
   if (!container) return;
 
-  const config = window.SMUGMUG_SLIDESHOW || (typeof SMUGMUG_SLIDESHOW !== "undefined" ? SMUGMUG_SLIDESHOW : null);
-
-  if (!config || !config.enabled || !config.embedUrl) {
-    container.innerHTML = `<div class="events-state"><h3>Photo slideshow coming soon</h3><p>Add your SmugMug slideshow settings in sitedata.js.</p></div>`;
+  if (typeof SMUGMUG_SLIDESHOW === "undefined" || !SMUGMUG_SLIDESHOW.enabled || !SMUGMUG_SLIDESHOW.embedUrl) {
+    container.innerHTML = '<p class="muted">Photo slideshow coming soon.</p>';
     return;
   }
 
-  if (title && config.title) title.textContent = config.title;
-  if (subtitle && config.subtitle) subtitle.textContent = config.subtitle;
+  if (title && SMUGMUG_SLIDESHOW.title) title.textContent = SMUGMUG_SLIDESHOW.title;
+  if (subtitle && SMUGMUG_SLIDESHOW.subtitle) subtitle.textContent = SMUGMUG_SLIDESHOW.subtitle;
 
   container.innerHTML = `
     <iframe
-      src="${config.embedUrl}"
-      title="Mic Drop Karaoke photo slideshow"
-      width="800"
-      height="600"
+      src="${SMUGMUG_SLIDESHOW.embedUrl}"
+      width="100%"
+      height="100%"
       frameborder="0"
       scrolling="no"
+      allow="autoplay; fullscreen"
       allowfullscreen>
     </iframe>
   `;
 }
 
-renderUpcomingEvents();
-renderReviews();
-renderSmugMugSlideshow();
+function setupBookingForm() {
+  const form = document.getElementById("booking-form");
+  const status = document.getElementById("form-status");
+  if (!form || !status) return;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    status.textContent = "Sending...";
+    status.className = "form-status";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      });
+
+      if (response.ok) {
+        form.reset();
+        status.textContent = "Thanks! Your booking request was sent.";
+        status.className = "form-status success";
+      } else {
+        status.textContent = "Something went wrong. Please try again or email us directly.";
+        status.className = "form-status error";
+      }
+    } catch (error) {
+      status.textContent = "Something went wrong. Please try again or email us directly.";
+      status.className = "form-status error";
+    }
+  });
+}
+
+function initSite() {
+  const year = document.getElementById("current-year");
+  if (year) year.textContent = new Date().getFullYear();
+
+  renderEvents();
+  renderSmugMugSlideshow();
+  renderReviews();
+  setupBookingForm();
+}
+
+document.addEventListener("DOMContentLoaded", initSite);

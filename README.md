@@ -1,40 +1,19 @@
-# Mic Drop Karaoke Website Files
+# Mic Drop Karaoke website repair files
 
-Upload these files to GitHub **without replacing your existing `sitedata.js`**.
+This package intentionally does **not** include `sitedata.js`.
 
-## Files in this package
+Upload these files to the root of your GitHub repo:
 
 - `index.html`
 - `styles.css`
 - `script.js`
 - `README.md`
 
-## Keep your existing file
-
-Do not overwrite:
-
-- `sitedata.js`
-
-Your `sitedata.js` should include:
+Keep your existing `sitedata.js` in the same folder. The site expects `sitedata.js` to define:
 
 - `UPCOMING_EVENTS`
 - `APPROVED_REVIEWS`
 - `SMUGMUG_SLIDESHOW`
 
-The site reads events, reviews, and the SmugMug slideshow from that file.
-
-## Form endpoint
-
-The booking form is already connected to:
-
-`https://formspree.io/f/xwvaglkv`
-
-## GitHub Pages
-
-Make sure these files are in the root of the repo, next to `sitedata.js`:
-
-- `index.html`
-- `styles.css`
-- `script.js`
-- `sitedata.js`
-- `CNAME` if using `mic-drop-events.com`
+The events section will render future events from `UPCOMING_EVENTS`.
+The photos section will render the SmugMug slideshow from `SMUGMUG_SLIDESHOW`.
