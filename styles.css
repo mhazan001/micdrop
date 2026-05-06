@@ -99,29 +99,40 @@ p { line-height: 1.6; }
 .event-tags { display: flex; gap: 14px; flex-wrap: wrap; }
 .event-tags span { padding: 14px 18px; border-radius: 999px; background: white; border: 1px solid rgba(27,18,48,.1); box-shadow: 0 12px 28px rgba(27,18,48,.06); font-weight: 900; }
 
+.moments-section { background: #ffffff; }
+.moments-section .section-heading p:last-child { color: var(--muted); margin-top: 14px; }
+.slideshow-frame {
+  max-width: 1040px;
+  margin: 0 auto;
+  border-radius: 30px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 0 24px 70px rgba(27,18,48,.18);
+  border: 1px solid rgba(27,18,48,.08);
+  aspect-ratio: 4 / 3;
+}
+.slideshow-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .upcoming-events-section .section-heading p:last-child { color: var(--muted); margin-top: 14px; }
 .events-card { max-width: 980px; margin: 0 auto; background: white; border: 1px solid rgba(27,18,48,.08); border-radius: 28px; padding: 22px; box-shadow: 0 18px 48px rgba(27,18,48,.08); }
 .events-list { display: grid; gap: 16px; }
 .event-card { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: start; padding: 18px; border-radius: 22px; background: linear-gradient(135deg, #fff, #f8f5ff); border: 1px solid rgba(27,18,48,.08); }
 .event-date-badge { text-align: center; border-radius: 18px; overflow: hidden; border: 1px solid rgba(27,18,48,.1); background: #fff; box-shadow: 0 10px 20px rgba(27,18,48,.06); }
-.event-date-badge .month { display: block; background: var(--gold); color: #1b1230; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; padding: 7px 6px; font-size: .82rem; }
-.event-date-badge .day { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2.9rem; line-height: 1; padding: 12px 6px 4px; color: var(--text); }
+.event-date-badge .month { display: block; background: var(--accent); color: #1b1230; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; padding: 7px 6px; font-size: .82rem; }
+.event-date-badge .day { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2.9rem; line-height: 1; padding: 12px 6px 4px; color: var(--dark); }
 .event-date-badge .year { display: block; color: var(--muted); font-weight: 800; padding: 0 6px 10px; font-size: .82rem; }
 .event-details h3 { margin: 0 0 8px; font-size: 1.35rem; }
-.event-meta { margin: 0 0 8px; color: var(--purple); font-weight: 900; }
+.event-meta { margin: 0 0 8px; color: var(--red); font-weight: 900; }
 .event-description { margin: 0; color: var(--muted); }
 .events-state { min-height: 220px; display: grid; place-items: center; text-align: center; padding: 34px 20px; border-radius: 20px; background: linear-gradient(135deg, #fff, #f8f5ff); border: 1px dashed rgba(27,18,48,.18); }
 .events-state p { max-width: 640px; margin: 4px auto 20px; color: var(--muted); }
 .hidden { display: none !important; }
 @media (max-width: 680px) { .event-card { grid-template-columns: 1fr; } .event-date-badge { max-width: 150px; } }
-
-
-.event-pill { display: inline-flex; margin-top: 10px; padding: 7px 11px; border-radius: 999px; background: rgba(255,46,166,.1); color: var(--purple); font-weight: 900; font-size: 13px; }
-.reviews-section .section-heading p:last-child { color: var(--muted); margin-top: 14px; }
-.review-submit-card { margin: 34px auto 0; max-width: 980px; display: grid; gap: 24px; background: #f8f5ff; border: 1px solid rgba(27,18,48,.08); border-radius: 28px; padding: 30px; box-shadow: 0 18px 48px rgba(27,18,48,.08); }
-.review-submit-card h3 { font-size: 32px; margin-bottom: 8px; }
-.stars { color: var(--gold); font-size: 20px; letter-spacing: 2px; margin: 12px 0 0; }
-#review-status { font-weight: 900; }
 
 blockquote { margin: 0; }
 blockquote p { font-size: 17px; }
@@ -157,4 +168,38 @@ form .button { margin-top: 20px; }
   opacity: 0;
   height: 0;
   width: 0;
+}
+
+/* SmugMug photo slideshow section */
+.photos-section {
+  background: #ffffff;
+}
+
+.photos-section .section-heading p:last-child {
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+.smugmug-slideshow-wrap {
+  width: min(100%, 1000px);
+  margin: 2rem auto 0;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  background: #111;
+}
+
+.smugmug-slideshow-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.stars {
+  color: #f5b700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem !important;
 }
