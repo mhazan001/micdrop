@@ -1,19 +1,32 @@
-# Mic Drop Karaoke website repair files
+# Mic Drop Karaoke website
 
-This package intentionally does **not** include `sitedata.js`.
+Upload all files in this package to the root of your GitHub Pages repo.
 
-Upload these files to the root of your GitHub repo:
+Root should contain:
 
-- `index.html`
-- `styles.css`
-- `script.js`
-- `README.md`
+- index.html
+- styles.css
+- script.js
+- sitedata.js
+- CNAME
 
-Keep your existing `sitedata.js` in the same folder. The site expects `sitedata.js` to define:
+## Edit events
 
-- `UPCOMING_EVENTS`
-- `APPROVED_REVIEWS`
-- `SMUGMUG_SLIDESHOW`
+Open `sitedata.js` and edit `UPCOMING_EVENTS`.
 
-The events section will render future events from `UPCOMING_EVENTS`.
-The photos section will render the SmugMug slideshow from `SMUGMUG_SLIDESHOW`.
+Use:
+
+- `date: "YYYY-MM-DD"`
+- `startTime: "20:00"` for 8 PM
+- `endTime: "00:00"` for midnight
+- `isPrivate: true` for private booked dates
+
+## Booking form
+
+The booking form is already connected to Formspree:
+
+https://formspree.io/f/xwvaglkv
+
+## Photos
+
+The SmugMug slideshow is hardcoded directly in `index.html` so it does not depend on JavaScript to load.

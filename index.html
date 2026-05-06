@@ -14,7 +14,8 @@
         <span class="brand-mark">🎤</span>
         <span>Mic Drop Karaoke</span>
       </a>
-      <nav class="main-nav" aria-label="Main navigation">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
         <a href="#events">Events</a>
         <a href="#photos">Photos</a>
         <a href="#packages">Packages</a>
@@ -36,7 +37,7 @@
             <a class="button secondary" href="#events">See Upcoming Events</a>
           </div>
         </div>
-        <div class="hero-card" aria-label="Mic Drop Karaoke highlights">
+        <div class="hero-card">
           <h2>We bring the party.</h2>
           <ul>
             <li>Professional karaoke setup</li>
@@ -56,7 +57,9 @@
           <p>Catch Mic Drop Karaoke at public events or check dates already booked.</p>
         </div>
         <div id="events-list" class="event-list">
-          <p class="muted">Loading upcoming events…</p>
+          <noscript>
+            <p class="muted">JavaScript is required to show the event list.</p>
+          </noscript>
         </div>
       </div>
     </section>
@@ -65,21 +68,57 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Event Photos</p>
-          <h2 id="photos-title">Mic Drop Moments</h2>
-          <p id="photos-subtitle">Photos from our karaoke nights, private parties, and community events.</p>
+          <h2>Mic Drop Moments</h2>
+          <p>Photos from our karaoke nights, private parties, and community events.</p>
         </div>
-        <div class="smugmug-slideshow-wrap" id="smugmug-slideshow">
-          <p class="muted">Loading photos…</p>
+
+        <div class="smugmug-slideshow-wrap">
+          <iframe
+            src="https://www.smugmug.com/frame/slideshow?key=6Fxv6G&speed=3&transition=fade&autoStart=1&captions=0&navigation=0&playButton=0&randomize=0&transitionSpeed=2"
+            title="Mic Drop Karaoke photo slideshow"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            scrolling="no"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+          </iframe>
         </div>
+
+        <p class="photo-fallback">
+          If the slideshow does not load, <a href="https://www.smugmug.com/frame/slideshow?key=6Fxv6G&speed=3&transition=fade&autoStart=1&captions=0&navigation=0&playButton=0&randomize=0&transitionSpeed=2" target="_blank" rel="noopener">open the Mic Drop Moments slideshow here</a>.
+        </p>
       </div>
     </section>
 
     <section id="packages" class="section packages-section">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">How We Help</p>
-          <h2>Karaoke for almost any occasion</h2>
-          <p>From casual bar nights to private celebrations, Mic Drop Karaoke helps create the kind of night people remember.</p>
+          <p class="eyebrow">How It Works</p>
+          <h2>Karaoke made easy</h2>
+          <p>We make it simple to bring professional karaoke entertainment to your event.</p>
+        </div>
+        <div class="card-grid">
+          <article class="info-card">
+            <div class="card-number">1</div>
+            <h3>Tell us about your event</h3>
+            <p>Send the date, location, timing, and event type. We’ll help match the setup to your crowd.</p>
+          </article>
+          <article class="info-card">
+            <div class="card-number">2</div>
+            <h3>We bring the setup</h3>
+            <p>We arrive with karaoke-ready equipment, song access, and hosts who keep the night moving.</p>
+          </article>
+          <article class="info-card">
+            <div class="card-number">3</div>
+            <h3>You enjoy the show</h3>
+            <p>Your guests sing, laugh, cheer, and create the kind of night everyone remembers.</p>
+          </article>
+        </div>
+
+        <div class="section-heading packages-heading">
+          <p class="eyebrow">Packages</p>
+          <h2>Great for all kinds of events</h2>
         </div>
         <div class="card-grid">
           <article class="info-card">
@@ -104,9 +143,7 @@
           <p class="eyebrow">Reviews</p>
           <h2>What people are saying</h2>
         </div>
-        <div id="reviews-list" class="review-grid">
-          <p class="muted">Loading reviews…</p>
-        </div>
+        <div id="reviews-list" class="review-grid"></div>
       </div>
     </section>
 

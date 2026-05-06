@@ -1,3 +1,12 @@
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function parseEventDate(event) {
   const date = event.date || "";
   const time = event.startTime || "00:00";
@@ -19,6 +28,11 @@ function formatTime(timeString) {
   const [hourRaw, minuteRaw] = timeString.split(":");
   const hour = Number(hourRaw);
   const minute = Number(minuteRaw || "0");
+
+  if (hour === 0 && minute === 0) {
+    return "12 AM";
+  }
+
   const date = new Date();
   date.setHours(hour, minute, 0, 0);
   return date.toLocaleTimeString("en-US", {
@@ -40,7 +54,7 @@ function renderEvents() {
   if (!container) return;
 
   if (typeof UPCOMING_EVENTS === "undefined" || !Array.isArray(UPCOMING_EVENTS)) {
-    container.innerHTML = '<p class="muted">No events are configured yet.</p>';
+    container.innerHTML = '<p class="muted">No events are configured yet. Edit sitedata.js to add events.</p>';
     return;
   }
 
@@ -64,12 +78,12 @@ function renderEvents() {
 
     return `
       <article class="event-card">
-        <div class="event-date">${formatDate(event.date)}</div>
+        <div class="event-date">${escapeHtml(formatDate(event.date))}</div>
         <div>
-          <h3>${event.title || "Mic Drop Karaoke Event"}</h3>
-          ${formatEventTime(event) ? `<p class="event-time">${formatEventTime(event)}</p>` : ""}
-          ${location ? `<p class="event-location">${location}</p>` : ""}
-          ${description ? `<p class="event-description">${description}</p>` : ""}
+          <h3>${escapeHtml(event.title || "Mic Drop Karaoke Event")}</h3>
+          ${formatEventTime(event) ? `<p class="event-time">${escapeHtml(formatEventTime(event))}</p>` : ""}
+          ${location ? `<p class="event-location">${escapeHtml(location)}</p>` : ""}
+          ${description ? `<p class="event-description">${escapeHtml(description)}</p>` : ""}
           ${event.isPrivate ? '<span class="private-pill">Booked</span>' : ""}
         </div>
       </article>
@@ -92,40 +106,12 @@ function renderReviews() {
     return `
       <article class="review-card">
         <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
-        <blockquote>“${review.quote || ""}”</blockquote>
-        <div class="review-author">${review.name || "Mic Drop Karaoke Customer"}</div>
-        <div class="review-type">${review.eventType || ""}</div>
+        <blockquote>“${escapeHtml(review.quote || "")}”</blockquote>
+        <div class="review-author">${escapeHtml(review.name || "Mic Drop Karaoke Customer")}</div>
+        <div class="review-type">${escapeHtml(review.eventType || "")}</div>
       </article>
     `;
   }).join("");
-}
-
-function renderSmugMugSlideshow() {
-  const container = document.getElementById("smugmug-slideshow");
-  const title = document.getElementById("photos-title");
-  const subtitle = document.getElementById("photos-subtitle");
-
-  if (!container) return;
-
-  if (typeof SMUGMUG_SLIDESHOW === "undefined" || !SMUGMUG_SLIDESHOW.enabled || !SMUGMUG_SLIDESHOW.embedUrl) {
-    container.innerHTML = '<p class="muted">Photo slideshow coming soon.</p>';
-    return;
-  }
-
-  if (title && SMUGMUG_SLIDESHOW.title) title.textContent = SMUGMUG_SLIDESHOW.title;
-  if (subtitle && SMUGMUG_SLIDESHOW.subtitle) subtitle.textContent = SMUGMUG_SLIDESHOW.subtitle;
-
-  container.innerHTML = `
-    <iframe
-      src="${SMUGMUG_SLIDESHOW.embedUrl}"
-      width="100%"
-      height="100%"
-      frameborder="0"
-      scrolling="no"
-      allow="autoplay; fullscreen"
-      allowfullscreen>
-    </iframe>
-  `;
 }
 
 function setupBookingForm() {
@@ -160,14 +146,28 @@ function setupBookingForm() {
   });
 }
 
+function setupMobileNav() {
+  const toggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("main-nav");
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => nav.classList.remove("open"));
+  });
+}
+
 function initSite() {
   const year = document.getElementById("current-year");
   if (year) year.textContent = new Date().getFullYear();
 
   renderEvents();
-  renderSmugMugSlideshow();
   renderReviews();
   setupBookingForm();
+  setupMobileNav();
 }
 
 document.addEventListener("DOMContentLoaded", initSite);
