@@ -557,3 +557,95 @@ h3 {
     padding: 56px 0;
   }
 }
+
+.calendar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.calendar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(215, 25, 32, 0.18);
+}
+
+.calendar-button:hover {
+  transform: translateY(-1px);
+}
+
+.secondary-calendar {
+  background: #111;
+  color: #fff;
+}
+
+
+/* Horizontal scrolling reviews */
+.review-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 360px);
+  gap: 1.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0 1.25rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.review-scroll .review-card {
+  scroll-snap-align: start;
+  min-height: 100%;
+}
+
+.review-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.review-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 999px;
+}
+
+.review-scroll::-webkit-scrollbar-thumb {
+  background: var(--red);
+  border-radius: 999px;
+}
+
+.review-scroll-hint {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: -1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 840px) {
+  .review-scroll {
+    grid-auto-columns: minmax(260px, 86vw);
+  }
+}
+
+
+/* Auto-scrolling reviews */
+.review-scroll {
+  scroll-behavior: auto;
+}
+
+.review-scroll:hover,
+.review-scroll:focus-within {
+  cursor: grab;
+}
+
+.review-scroll.is-paused {
+  cursor: default;
+}

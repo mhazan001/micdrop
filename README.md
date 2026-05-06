@@ -1,15 +1,17 @@
 # Mic Drop Karaoke website
 
-This version restores:
+This verified version includes:
 
-- Pricing packages
-- Review submission form
-- Approved reviews display
-- Upcoming events
+- Events
 - SmugMug slideshow
-- Booking form
+- Pricing packages
+- Approved reviews
+- Review submission form
+- Booking request form
+- Formspree integration
+- Custom domain CNAME
 
-## Upload these files to the GitHub repo root
+Upload all files to the GitHub repo root:
 
 - index.html
 - styles.css
@@ -18,12 +20,33 @@ This version restores:
 - CNAME
 - README.md
 
-## Edit events and approved reviews
+Do not upload these inside a folder.
 
-Edit `sitedata.js`.
 
-Reviews submitted through the website go to the same Formspree endpoint as the booking form, but include:
+## Add to Calendar buttons
 
-`form_type = Review Submission`
+Upcoming public events show calendar options:
 
-Only copy approved reviews into `APPROVED_REVIEWS`.
+- Add to Google Calendar
+- Apple / Outlook, which downloads an `.ics` calendar file
+
+These buttons are generated from `UPCOMING_EVENTS` in `sitedata.js`.
+Private events do not show calendar buttons.
+
+
+## Reviews behavior
+
+Approved reviews display in a horizontal left-to-right scrolling row.
+To add more reviews, edit `APPROVED_REVIEWS` in `sitedata.js`.
+The page will not get taller with every review; visitors can swipe/scroll sideways.
+
+
+## Auto-scrolling reviews
+
+Approved reviews now scroll automatically from left to right.
+If there is more than one approved review, the site duplicates the review row to create a seamless loop.
+
+Behavior:
+- Auto-scrolls continuously
+- Pauses when a visitor hovers, clicks, or touches the reviews
+- Visitors can still manually drag/scroll sideways
