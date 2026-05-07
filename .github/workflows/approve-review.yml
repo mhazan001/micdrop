@@ -1,0 +1,56 @@
+name: Approve review into sitedata
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  approve-review:
+    if: github.event.label.name == 'approved-review'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Add approved review to sitedata.js
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: node scripts/approve-review.js
+
+      - name: Create pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: "Add approved review from issue #${{ github.event.issue.number }}"
+          title: "Add approved review from issue #${{ github.event.issue.number }}"
+          body: |
+            This PR adds an approved review from issue #${{ github.event.issue.number }}.
+
+            Source issue: ${{ github.event.issue.html_url }}
+
+            After merging, the review will appear on the Mic Drop Karaoke website.
+          branch: "approved-review-${{ github.event.issue.number }}"
+          delete-branch: true
+
+      - name: Comment on issue with PR link
+        if: steps.cpr.outputs.pull-request-url != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `Approved-review PR created: ${process.env.PR_URL}`
+            })
+        env:
+          PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
