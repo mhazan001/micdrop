@@ -68,3 +68,15 @@ Files included:
 
 Reviews now use CSS marquee-style auto-scroll instead of relying on browser scroll position.
 The scrollbar is hidden, and the animation pauses on hover/focus.
+
+
+## Mic Drop logo placement
+
+Your main Mic Drop logo is now placed in the three recommended spots:
+
+- Header (small logo)
+- Hero section (large branded feature)
+- Footer (small logo)
+
+The logo file included is:
+- mic-drop-logo.png

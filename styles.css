@@ -750,3 +750,69 @@ h3 {
     overflow-x: auto;
   }
 }
+
+
+/* Main Mic Drop logo placement */
+.site-logo {
+  display: block;
+  object-fit: contain;
+}
+
+.site-logo-header {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: #111;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.brand {
+  gap: 0.85rem;
+}
+
+.brand-mark {
+  display: none;
+}
+
+.hero-brand-card {
+  text-align: center;
+}
+
+.site-logo-hero {
+  width: min(100%, 420px);
+  margin: 0 auto 1rem;
+}
+
+.hero-brand-text {
+  margin: 0 0 1rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.site-logo-footer {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: #111;
+}
+
+@media (max-width: 840px) {
+  .site-logo-header {
+    width: 46px;
+    height: 46px;
+  }
+
+  .site-logo-hero {
+    width: min(100%, 340px);
+  }
+
+  .footer-brand {
+    align-items: center;
+  }
+}
