@@ -55,23 +55,12 @@ const UPCOMING_EVENTS = [
 ];
 
 const APPROVED_REVIEWS = [
+ 
   {
-    name: "Sarah Mitchell",
-    eventType: "Wedding Reception",
+    name: "Samantha Chen",
+    eventType: "Audacious Event",
     rating: 5,
-    quote: "Mic Drop Karaoke made our reception unforgettable. The energy was amazing and our guests are still talking about it."
-  },
-  {
-    name: "James Chen",
-    eventType: "Corporate Event",
-    rating: 5,
-    quote: "Great equipment, fantastic energy, and the team was incredibly easy to work with. It was the highlight of our event."
-  },
-  {
-    name: "Emma Thompson",
-    eventType: "Birthday Party",
-    rating: 5,
-    quote: "Best decision ever for my birthday. Everyone had a blast, the song selection was great, and the setup was seamless."
+    quote: "Mark and Mike are simply amazing emcees.  My favorite part is when Mark walks around with a microphone and gets even shy people to sing"
   }
 ];
 
