@@ -55,6 +55,14 @@ const UPCOMING_EVENTS = [
 ];
 
 const APPROVED_REVIEWS = [
+  {
+    name: "TestGithub",
+    eventType: "test",
+    rating: 5,
+    quote: "test review",
+    sourceIssue: "https://github.com/mhazan001/micdrop/issues/2"
+  },
+
  
   {
     name: "Samantha Chen",
