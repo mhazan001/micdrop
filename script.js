@@ -222,35 +222,89 @@ function renderReviews() {
   const container = document.getElementById("reviews-list");
   if (!container) return;
 
-  if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || !APPROVED_REVIEWS.length) return;
+  if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || !APPROVED_REVIEWS.length) {
+    container.innerHTML = '<p class="muted">Approved reviews will appear here soon.</p>';
+    return;
+  }
 
   const reviewsToRender = APPROVED_REVIEWS.length > 1
     ? [...APPROVED_REVIEWS, ...APPROVED_REVIEWS]
     : [...APPROVED_REVIEWS];
 
-  container.innerHTML = `
-    <div class="review-marquee-track">
-      ${reviewsToRender.map((review) => {
-        const rating = Number(review.rating || 5);
-        const stars = "★".repeat(Math.max(1, Math.min(5, rating)));
-        return `
-          <article class="review-card">
-            <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
-            <blockquote>“${escapeHtml(review.quote || "")}”</blockquote>
-            <div class="review-author">${escapeHtml(review.name || "Mic Drop Karaoke Customer")}</div>
-            <div class="review-type">${escapeHtml(review.eventType || "")}</div>
-          </article>
-        `;
-      }).join("")}
-    </div>
-  `;
+  container.innerHTML = reviewsToRender.map((review) => {
+    const rating = Number(review.rating || 5);
+    const stars = "★".repeat(Math.max(1, Math.min(5, rating)));
+
+    return `
+      <article class="review-card">
+        <div class="review-stars" aria-label="${rating} out of 5 stars">${stars}</div>
+        <blockquote>“${escapeHtml(review.quote || "")}”</blockquote>
+        <div class="review-author">${escapeHtml(review.name || "Mic Drop Karaoke Customer")}</div>
+        <div class="review-type">${escapeHtml(review.eventType || "")}</div>
+      </article>
+    `;
+  }).join("");
 }
 
 function setupReviewAutoScroll() {
-  const container = document.getElementById("reviews-list");
-  if (!container) return;
-  container.classList.add("auto-scroll-ready");
+  const track = document.getElementById("reviews-list");
+  if (!track) return;
+  if (typeof APPROVED_REVIEWS === "undefined" || !Array.isArray(APPROVED_REVIEWS) || APPROVED_REVIEWS.length <= 1) return;
+
+  let offset = 0;
+  let paused = false;
+  let animationFrameId = null;
+  const speed = 0.45;
+
+  function getResetPoint() {
+    return track.scrollWidth / 2;
+  }
+
+  function step() {
+    if (!paused) {
+      offset -= speed;
+
+      const resetPoint = getResetPoint();
+
+      if (Math.abs(offset) >= resetPoint) {
+        offset = 0;
+      }
+
+      track.style.transform = `translateX(${offset}px)`;
+    }
+
+    animationFrameId = window.requestAnimationFrame(step);
+  }
+
+  function pause() {
+    paused = true;
+  }
+
+  function resume() {
+    paused = false;
+  }
+
+  track.addEventListener("mouseenter", pause);
+  track.addEventListener("mouseleave", resume);
+  track.addEventListener("focusin", pause);
+  track.addEventListener("focusout", resume);
+  track.addEventListener("touchstart", pause, { passive: true });
+  track.addEventListener("touchend", resume, { passive: true });
+  track.addEventListener("pointerdown", pause);
+  track.addEventListener("pointerup", resume);
+
+  window.addEventListener("resize", () => {
+    offset = 0;
+    track.style.transform = "translateX(0)";
+  });
+
+  if (animationFrameId) {
+    window.cancelAnimationFrame(animationFrameId);
+  }
+
+  animationFrameId = window.requestAnimationFrame(step);
 }
+
 function setupAjaxForm(formId, statusId, successMessage) {
   const form = document.getElementById(formId);
   const status = document.getElementById(statusId);

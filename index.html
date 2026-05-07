@@ -11,7 +11,7 @@
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="#top" aria-label="Mic Drop Karaoke home">
-        <img class="site-logo site-logo-header" src="mic-drop-logo.png" alt="Mic Drop Karaoke logo" />
+        <span class="brand-mark">🎤</span>
         <span>Mic Drop Karaoke</span>
       </a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
@@ -37,15 +37,13 @@
             <a class="button secondary" href="#events">See Upcoming Events</a>
           </div>
         </div>
-        <div class="hero-card hero-brand-card">
-          <img class="site-logo site-logo-hero" src="mic-drop-logo.png" alt="Mic Drop Karaoke logo" />
-          <h2>Mic Drop Karaoke</h2>
-          <p class="hero-brand-text">High-energy karaoke hosting for bars, restaurants, private parties, birthdays, fundraisers, and community events.</p>
+        <div class="hero-card">
+          <h2>We bring the party.</h2>
           <ul>
             <li>Professional karaoke setup</li>
             <li>Fun, energetic hosts</li>
             <li>Huge song selection</li>
-            <li>Memorable nights people talk about after the music stops</li>
+            <li>Great for bars, restaurants, fundraisers, birthdays, and private events</li>
           </ul>
         </div>
       </div>
@@ -192,41 +190,21 @@
         <div class="section-heading">
           <p class="eyebrow">Reviews</p>
           <h2>What people are saying</h2>
-          <p>Read approved reviews, or submit your own Mic Drop moment below. Reviews auto-scroll and pause when visitors hover or tap.</p>
+          <p>Read approved reviews, or submit your own Mic Drop moment below. Reviews move right to left and loop continuously. Reviews move right to left and loop continuously.</p>
         </div>
 
-        <div id="reviews-list" class="review-marquee">
-          <div class="review-marquee-track">
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <blockquote>“Mic Drop Karaoke made our reception unforgettable. The energy was amazing and our guests are still talking about it.”</blockquote>
-            <div class="review-author">Sarah Mitchell</div>
-            <div class="review-type">Wedding Reception</div>
-          </article>
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <blockquote>“Great equipment, fantastic energy, and the team was incredibly easy to work with. It was the highlight of our event.”</blockquote>
-            <div class="review-author">James Chen</div>
-            <div class="review-type">Corporate Event</div>
-          </article>
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <blockquote>“Best decision ever for my birthday. Everyone had a blast, the song selection was great, and the setup was seamless.”</blockquote>
-            <div class="review-author">Emma Thompson</div>
-            <div class="review-type">Birthday Party</div>
-          </article>
-          </div>
+        <div class="review-marquee" aria-label="Approved customer reviews">
+          <div id="reviews-list" class="review-track"></div>
         </div>
 
         <div class="review-submit-card">
           <div>
             <p class="eyebrow">Leave a Review</p>
             <h3>Had a mic drop moment?</h3>
-            <p>Send us your review.</p>
+            <p>Send us your review. We’ll review it first, then add approved reviews to the website.</p>
           </div>
-         
-          <form id="review-form" class="review-form" action="https://mic-drop-review-submit.mark-hazan.workers.dev" method="POST">  
-          <!--<form id="review-form" class="review-form" action="https://formspree.io/f/mojrlkqo" method="POST"-->
+
+          <form id="review-form" class="review-form" action="https://mic-drop-review-submit.mark-hazan.workers.dev" method="POST">
             <input type="hidden" name="_subject" value="New Mic Drop Karaoke review submission" />
             <input type="hidden" name="form_type" value="Review Submission" />
 
@@ -312,7 +290,7 @@
 
   <footer class="site-footer">
     <div class="container footer-wrap">
-      <div class="footer-brand"><img class="site-logo site-logo-footer" src="mic-drop-logo.png" alt="Mic Drop Karaoke logo" /><p>© <span id="current-year">2026</span> Mic Drop Karaoke. All rights reserved.</p></div>
+      <p>© <span id="current-year">2026</span> Mic Drop Karaoke. All rights reserved.</p>
       <a href="#top">Back to top</a>
     </div>
   </footer>
