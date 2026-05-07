@@ -80,3 +80,14 @@ Your main Mic Drop logo is now placed in the three recommended spots:
 
 The logo file included is:
 - mic-drop-logo.png
+
+
+## Formspree endpoints
+
+Booking form endpoint:
+https://formspree.io/f/xwvaglkv
+
+Review form endpoint:
+https://formspree.io/f/mojrlkqo
+
+The review form submits to its own Formspree form, so review submissions are separated from booking requests.
