@@ -24,7 +24,8 @@
         <div>
           <p class="eyebrow">Voice Match</p>
           <h1>Find karaoke songs that fit your voice.</h1>
-          <p class="hero-text">Sing a comfortable low note, then a comfortable high note. Voice Match estimates your range and ranks karaoke songs from a starter KaraFun-friendly catalog.</p>
+          <p class="hero-text">Sing a comfortable low note, then a comfortable high note. Voice Match estimates your range and shows only range-tagged KaraFun songs that fit inside it.</p>
+          <div class="hero-actions"><a class="button secondary" href="#catalog-search-section">Search Full Catalog</a></div>
           <div class="range-readout" aria-live="polite">
             <div><span>Low note</span><strong id="low-note-output">Not captured</strong></div>
             <div><span>High note</span><strong id="high-note-output">Not captured</strong></div>
@@ -40,6 +41,34 @@
           <p id="song-finder-status" class="form-status" role="status">Use a steady “ah” sound for about 3 seconds.</p>
           <div id="song-results" class="song-results"></div>
         </div>
+      </div>
+    </section>
+
+    <section id="catalog-search-section" class="section catalog-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">KaraFun Catalog</p>
+          <h2>Search the full KaraFun catalog.</h2>
+          <p>This search includes every song from the spreadsheet, even songs without vocal range data. Voice Match above still uses only songs with low and high notes.</p>
+        </div>
+        <div class="catalog-controls">
+          <label>Search full catalog
+            <input id="catalog-search" type="search" placeholder="Type a song or artist" />
+          </label>
+          <label>Category
+            <select id="catalog-category-type">
+              <option value="artist">Artist</option>
+              <option value="voiceType">Voice Type (range-tagged)</option>
+              <option value="difficulty">Difficulty (range-tagged)</option>
+            </select>
+          </label>
+          <label>Show
+            <select id="catalog-category-value"></select>
+          </label>
+        </div>
+        <p id="catalog-count" class="form-status"></p>
+        <div id="catalog-results" class="song-results catalog-results"></div>
+        <button class="button secondary catalog-more" type="button" id="catalog-more">Show More</button>
       </div>
     </section>
 
@@ -60,6 +89,6 @@
   </main>
 
   <footer class="site-footer"><div class="container footer-wrap"><p>© <span id="current-year">2026</span> Mic Drop Karaoke. All rights reserved.</p><a href="index.html#top">Back to home</a></div></footer>
-  <script src="sitedata.js?v=20260510-song-finder-2"></script><script src="script-song-finder.js?v=20260510-song-ranking"></script>
+  <script src="sitedata.js?v=20260510-song-finder-2"></script><script src="karafun-catalog.js?v=20260510-range-catalog"></script><script src="script-song-finder.js?v=20260510-range-catalog"></script>
 </body>
 </html>

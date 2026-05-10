@@ -205,6 +205,10 @@ function frequencyToMidi(frequency) {
   return Math.round(69 + 12 * Math.log2(frequency / 440));
 }
 
+function midiToFrequency(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
 function midiToNoteName(midi) {
   const names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
   return `${names[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -253,6 +257,36 @@ function detectPitch(buffer, sampleRate) {
   return sampleRate / tau;
 }
 
+function getSpectrumValue(data, bin) {
+  const low = Math.floor(bin);
+  const high = Math.ceil(bin);
+  if (low < 0 || high >= data.length) return 0;
+  return data[low] + (data[high] - data[low]) * (bin - low);
+}
+
+function detectSpectralPitch(data, sampleRate) {
+  const binHz = sampleRate / (data.length * 2);
+  let bestMidi = null;
+  let bestScore = 0;
+
+  for (let midi = 35; midi <= 84; midi += 0.5) {
+    const frequency = midiToFrequency(midi);
+    let score = 0;
+    for (let harmonic = 1; harmonic <= 6; harmonic++) {
+      const harmonicFrequency = frequency * harmonic;
+      if (harmonicFrequency > 1800) break;
+      score += getSpectrumValue(data, harmonicFrequency / binHz) / harmonic;
+    }
+    score -= Math.max(0, frequency - 500) * 0.015;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMidi = midi;
+    }
+  }
+
+  return bestScore > 18 && bestMidi ? midiToFrequency(Math.round(bestMidi)) : null;
+}
+
 function getStableMidi(readings) {
   const useful = readings
     .filter((midi) => midi >= 35 && midi <= 85)
@@ -261,25 +295,143 @@ function getStableMidi(readings) {
   return useful[Math.floor(useful.length / 2)];
 }
 
+function adjustLikelyOctave(kind, midi, captured) {
+  if (kind === "high" && captured.low && midi - captured.low < 10 && midi + 12 <= 85) {
+    return midi + 12;
+  }
+  if (kind === "low" && captured.high && captured.high - midi < 10 && midi - 12 >= 35) {
+    return midi - 12;
+  }
+  return midi;
+}
+
+function getKarafunCatalog() {
+  if (typeof KARAFUN_GROUPED_CATALOG !== "undefined") {
+    return KARAFUN_GROUPED_CATALOG.flatMap(([artist, voiceType, low, high, difficulty, songs]) =>
+      songs.map((title) => ({ title, artist, voiceType, low, high, difficulty }))
+    );
+  }
+  if (typeof KARAFUN_SONG_SUGGESTIONS !== "undefined") {
+    return KARAFUN_SONG_SUGGESTIONS.map((song) => ({
+      ...song,
+      voiceType: song.voiceType || "Starter Picks",
+      difficulty: song.difficulty || "Estimated"
+    }));
+  }
+  return [];
+}
+
+function getFullKarafunCatalog() {
+  if (typeof KARAFUN_ALL_CATALOG !== "undefined") {
+    return KARAFUN_ALL_CATALOG.flatMap(([artist, songs]) =>
+      songs.map((title) => ({ title, artist, hasRange: false }))
+    );
+  }
+  return getKarafunCatalog().map((song) => ({ ...song, hasRange: Number.isFinite(song.low) && Number.isFinite(song.high) }));
+}
+
 function scoreSongForRange(song, lowMidi, highMidi) {
-  const lowGap = Math.max(0, lowMidi - song.low);
-  const highGap = Math.max(0, song.high - highMidi);
-  const comfortBonus = song.low >= lowMidi - 2 && song.high <= highMidi + 2 ? 6 : 0;
-  return 100 - (lowGap + highGap) * 8 + comfortBonus - Math.abs((song.high - song.low) - (highMidi - lowMidi));
+  const userRange = highMidi - lowMidi;
+  const songRange = song.high - song.low;
+  const lowComfort = song.low - lowMidi;
+  const highComfort = highMidi - song.high;
+  return 100 - Math.abs(songRange - userRange) * 1.5 - Math.abs(lowComfort - highComfort);
 }
 
 function renderSongMatches(lowMidi, highMidi) {
   const results = document.getElementById("song-results");
-  if (!results || typeof KARAFUN_SONG_SUGGESTIONS === "undefined") return;
-  const sorted = KARAFUN_SONG_SUGGESTIONS
+  if (!results) return false;
+  if (highMidi - lowMidi < 10) {
+    results.innerHTML = '<article class="song-card"><div><h3>Try one more capture</h3><p>Your captured range is very narrow, so song matches would be unreliable. Sing your highest comfortable note again and hold it a little longer.</p></div><span>Retest</span></article>';
+    return false;
+  }
+  const sorted = getKarafunCatalog()
+    .filter((song) => Number.isFinite(song.low) && Number.isFinite(song.high) && song.low >= lowMidi && song.high <= highMidi)
     .map((song) => ({ ...song, score: scoreSongForRange(song, lowMidi, highMidi) }))
     .sort((a, b) => b.score - a.score)
-    .slice(0, 6);
+    .slice(0, 12);
+
+  if (!sorted.length) {
+    results.innerHTML = '<article class="song-card"><div><h3>No exact matches yet</h3><p>No range-tagged KaraFun songs in this catalog fit fully inside that captured range. Try capturing a wider high note, or use the catalog browser below.</p></div><span>Exact only</span></article>';
+    return false;
+  }
 
   results.innerHTML = sorted.map((song) => {
-    const fit = song.low >= lowMidi && song.high <= highMidi ? "Comfort fit" : "Try with confidence";
-    return `<article class="song-card"><div><h3>${escapeHtml(song.title)}</h3><p>${escapeHtml(song.artist)}</p></div><span>${escapeHtml(song.vibe)}</span><small>${midiToNoteName(song.low)} - ${midiToNoteName(song.high)} · ${fit}</small></article>`;
+    const label = song.voiceType || song.difficulty || "Range tagged";
+    return `<article class="song-card"><div><h3>${escapeHtml(song.title)}</h3><p>${escapeHtml(song.artist)}</p></div><span>${escapeHtml(label)}</span><small>${midiToNoteName(song.low)} - ${midiToNoteName(song.high)} · ${escapeHtml(song.difficulty || "Range tagged")} · Fits your range</small></article>`;
   }).join("");
+  return true;
+}
+
+function setupCatalogBrowser() {
+  const typeSelect = document.getElementById("catalog-category-type");
+  const valueSelect = document.getElementById("catalog-category-value");
+  const searchInput = document.getElementById("catalog-search");
+  const count = document.getElementById("catalog-count");
+  const results = document.getElementById("catalog-results");
+  const more = document.getElementById("catalog-more");
+  if (!typeSelect || !valueSelect || !searchInput || !count || !results || !more) return;
+
+  const fullCatalog = getFullKarafunCatalog();
+  const rangeCatalog = getKarafunCatalog().map((song) => ({ ...song, hasRange: true }));
+  let visibleCount = 120;
+
+  function getFilteredSongs() {
+    const key = typeSelect.value;
+    const category = valueSelect.value;
+    const query = searchInput.value.trim().toLowerCase();
+    const source = key === "artist" ? fullCatalog : rangeCatalog;
+    return source.filter((song) => {
+      const categoryValue = song[key] || "Unknown";
+      const matchesCategory = category === "All" || categoryValue === category;
+      const matchesQuery = !query || `${song.title} ${song.artist}`.toLowerCase().includes(query);
+      return matchesCategory && matchesQuery;
+    }).sort((a, b) => a.title.localeCompare(b.title) || a.artist.localeCompare(b.artist));
+  }
+
+  function populateValues() {
+    const key = typeSelect.value;
+    const source = key === "artist" ? fullCatalog : rangeCatalog;
+    const values = Array.from(new Set(source.map((song) => song[key] || "Unknown"))).sort();
+    valueSelect.innerHTML = ["All", ...values].map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
+  }
+
+  function render() {
+    const key = typeSelect.value;
+    const filtered = getFilteredSongs();
+    const page = filtered.slice(0, visibleCount);
+    const label = key === "artist" ? "songs" : "range-tagged songs";
+    count.textContent = `${filtered.length.toLocaleString()} ${label} found. Showing ${page.length.toLocaleString()}.`;
+    results.innerHTML = page.map((song) => {
+      const rangeText = Number.isFinite(song.low) && Number.isFinite(song.high)
+        ? `${midiToNoteName(song.low)} - ${midiToNoteName(song.high)} · ${escapeHtml(song.difficulty || "Unknown")}`
+        : "Full catalog listing";
+      const badge = key === "artist" ? (song.hasRange ? "Range tagged" : "Catalog") : (song.voiceType || "Unknown");
+      return `<article class="song-card"><div><h3>${escapeHtml(song.title)}</h3><p>${escapeHtml(song.artist)}</p></div><span>${escapeHtml(badge)}</span><small>${rangeText}</small></article>`;
+    }).join("");
+    more.hidden = visibleCount >= filtered.length;
+  }
+
+  typeSelect.addEventListener("change", () => {
+    visibleCount = 120;
+    populateValues();
+    render();
+  });
+  valueSelect.addEventListener("change", () => {
+    visibleCount = 120;
+    render();
+  });
+  searchInput.addEventListener("input", () => {
+    visibleCount = 120;
+    render();
+  });
+  more.addEventListener("click", () => {
+    visibleCount += 120;
+    render();
+  });
+
+  populateValues();
+  render();
 }
 
 function setupSongFinder() {
@@ -313,18 +465,23 @@ function setupSongFinder() {
       const audioContext = new AudioContextClass();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 4096;
+      analyser.fftSize = 8192;
+      analyser.smoothingTimeConstant = 0.7;
       source.connect(analyser);
       const data = new Float32Array(analyser.fftSize);
+      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
       const readings = [];
       const start = performance.now();
 
       await new Promise((resolve) => {
         function tick(now) {
           analyser.getFloatTimeDomainData(data);
-          const frequency = detectPitch(data, audioContext.sampleRate);
+          analyser.getByteFrequencyData(frequencyData);
+          const frequency = detectPitch(data, audioContext.sampleRate) || detectSpectralPitch(frequencyData, audioContext.sampleRate);
           if (frequency) {
-            readings.push(frequencyToMidi(frequency));
+            const midi = frequencyToMidi(frequency);
+            readings.push(midi);
+            (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
             if (level) level.style.width = `${Math.min(100, Math.max(8, (frequency / 8)))}%`;
           }
           if (now - start < 3200) requestAnimationFrame(tick);
@@ -334,13 +491,25 @@ function setupSongFinder() {
       });
 
       await audioContext.close();
-      const midi = getStableMidi(readings);
-      if (!midi) throw new Error("No steady note detected");
+      const rawMidi = getStableMidi(readings);
+      if (!rawMidi) throw new Error("No steady note detected");
+      const midi = adjustLikelyOctave(kind, rawMidi, captured);
       captured[kind] = midi;
-      (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
-      status.textContent = captured.low && captured.high ? "Nice. Here are songs that should fit your range." : "Captured. Now record the other end of your range.";
+      lowOutput.textContent = captured.low ? midiToNoteName(captured.low) : "Not captured";
+      highOutput.textContent = captured.high ? midiToNoteName(captured.high) : "Not captured";
+      status.textContent = captured.low && captured.high ? "Captured. Ranking songs by how closely they match your range." : "Captured. Now record the other end of your range.";
       status.className = "form-status success";
-      if (captured.low && captured.high) renderSongMatches(Math.min(captured.low, captured.high), Math.max(captured.low, captured.high));
+      if (captured.low && captured.high) {
+        const low = Math.min(captured.low, captured.high);
+        const high = Math.max(captured.low, captured.high);
+        const hasExactFit = renderSongMatches(low, high);
+        status.textContent = high - low < 10
+          ? "That captured range is too narrow for useful song picks. Try the high note again."
+          : hasExactFit
+            ? "Nice. These range-tagged songs fit inside your captured range."
+            : "No range-tagged catalog songs fully fit that capture yet. Try recording a wider high note.";
+        status.className = high - low < 10 ? "form-status error" : "form-status success";
+      }
     } catch (error) {
       status.textContent = "I couldn't lock onto the pitch. Try holding a louder, steady “ah” close to the microphone.";
       status.className = "form-status error";
@@ -364,6 +533,7 @@ function initSite() {
   setupAjaxForm("booking-form", "form-status", "Thanks! Your booking request was sent.");
   setupAjaxForm("review-form", "review-status", "Thanks! Your review was submitted for approval.");
   setupSongFinder();
+  setupCatalogBrowser();
   setupMobileNav();
 }
 
