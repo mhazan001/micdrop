@@ -71,6 +71,27 @@ const APPROVED_REVIEWS = [
   }
 ];
 
+const KARAFUN_SONG_SUGGESTIONS = [
+  { title: "Sweet Caroline", artist: "Neil Diamond", low: 47, high: 64, vibe: "Crowd classic" },
+  { title: "Don't Stop Believin'", artist: "Journey", low: 52, high: 69, vibe: "Big singalong" },
+  { title: "Valerie", artist: "Amy Winehouse", low: 55, high: 70, vibe: "Soul pop" },
+  { title: "Mr. Brightside", artist: "The Killers", low: 57, high: 70, vibe: "Party rock" },
+  { title: "Wonderwall", artist: "Oasis", low: 52, high: 67, vibe: "Easygoing" },
+  { title: "Tennessee Whiskey", artist: "Chris Stapleton", low: 47, high: 66, vibe: "Country soul" },
+  { title: "Jolene", artist: "Dolly Parton", low: 54, high: 69, vibe: "Country classic" },
+  { title: "Love Story", artist: "Taylor Swift", low: 55, high: 71, vibe: "Pop country" },
+  { title: "I Wanna Dance with Somebody", artist: "Whitney Houston", low: 58, high: 75, vibe: "Dance floor" },
+  { title: "Dancing Queen", artist: "ABBA", low: 56, high: 73, vibe: "Disco pop" },
+  { title: "Girls Just Want to Have Fun", artist: "Cyndi Lauper", low: 57, high: 74, vibe: "Retro pop" },
+  { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", low: 54, high: 72, vibe: "Funk party" },
+  { title: "Creep", artist: "Radiohead", low: 48, high: 67, vibe: "Alt rock" },
+  { title: "Shallow", artist: "Lady Gaga & Bradley Cooper", low: 50, high: 74, vibe: "Duet drama" },
+  { title: "Let It Go", artist: "Idina Menzel", low: 56, high: 77, vibe: "Power ballad" },
+  { title: "Before He Cheats", artist: "Carrie Underwood", low: 55, high: 73, vibe: "Country rock" },
+  { title: "I'm Yours", artist: "Jason Mraz", low: 50, high: 67, vibe: "Warmup friendly" },
+  { title: "Someone Like You", artist: "Adele", low: 52, high: 72, vibe: "Piano ballad" }
+];
+
 const SMUGMUG_SLIDESHOW = {
   enabled: true,
   title: "Mic Drop Moments",
