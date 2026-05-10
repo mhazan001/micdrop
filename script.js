@@ -214,27 +214,51 @@ function detectPitch(buffer, sampleRate) {
   let rms = 0;
   for (const sample of buffer) rms += sample * sample;
   rms = Math.sqrt(rms / buffer.length);
-  if (rms < 0.015) return null;
+  if (rms < 0.006) return null;
 
-  let bestOffset = -1;
-  let bestCorrelation = 0;
-  const minOffset = Math.floor(sampleRate / 900);
-  const maxOffset = Math.floor(sampleRate / 70);
+  const minTau = Math.floor(sampleRate / 900);
+  const maxTau = Math.min(Math.floor(sampleRate / 65), buffer.length - 1);
+  const differences = new Float32Array(maxTau + 1);
 
-  for (let offset = minOffset; offset <= maxOffset; offset++) {
-    let correlation = 0;
-    for (let i = 0; i < buffer.length - offset; i++) {
-      correlation += buffer[i] * buffer[i + offset];
+  for (let tau = minTau; tau <= maxTau; tau++) {
+    let difference = 0;
+    for (let i = 0; i < buffer.length - tau; i++) {
+      const delta = buffer[i] - buffer[i + tau];
+      difference += delta * delta;
     }
-    correlation /= buffer.length - offset;
-    if (correlation > bestCorrelation) {
-      bestCorrelation = correlation;
-      bestOffset = offset;
+    differences[tau] = difference;
+  }
+
+  let runningTotal = 0;
+  let bestTau = -1;
+  let bestValue = 1;
+  for (let tau = minTau; tau <= maxTau; tau++) {
+    runningTotal += differences[tau];
+    if (!runningTotal) continue;
+    const value = differences[tau] * tau / runningTotal;
+    if (value < 0.22 && value < bestValue) {
+      bestValue = value;
+      bestTau = tau;
+      while (tau + 1 <= maxTau && differences[tau + 1] < differences[tau]) tau++;
+      break;
     }
   }
 
-  if (bestOffset < 0 || bestCorrelation < 0.01) return null;
-  return sampleRate / bestOffset;
+  if (bestTau < 0) return null;
+  const before = differences[bestTau - 1] || differences[bestTau];
+  const current = differences[bestTau];
+  const after = differences[bestTau + 1] || differences[bestTau];
+  const adjustment = (after - before) / (2 * (2 * current - before - after));
+  const tau = Number.isFinite(adjustment) ? bestTau + adjustment : bestTau;
+  return sampleRate / tau;
+}
+
+function getStableMidi(readings) {
+  const useful = readings
+    .filter((midi) => midi >= 35 && midi <= 85)
+    .sort((a, b) => a - b);
+  if (!useful.length) return null;
+  return useful[Math.floor(useful.length / 2)];
 }
 
 function scoreSongForRange(song, lowMidi, highMidi) {
@@ -289,7 +313,7 @@ function setupSongFinder() {
       const audioContext = new AudioContextClass();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
+      analyser.fftSize = 4096;
       source.connect(analyser);
       const data = new Float32Array(analyser.fftSize);
       const readings = [];
@@ -310,16 +334,15 @@ function setupSongFinder() {
       });
 
       await audioContext.close();
-      const useful = readings.filter((midi) => midi >= 35 && midi <= 85);
-      if (!useful.length) throw new Error("No steady note detected");
-      const midi = kind === "low" ? Math.min(...useful) : Math.max(...useful);
+      const midi = getStableMidi(readings);
+      if (!midi) throw new Error("No steady note detected");
       captured[kind] = midi;
       (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
       status.textContent = captured.low && captured.high ? "Nice. Here are songs that should fit your range." : "Captured. Now record the other end of your range.";
       status.className = "form-status success";
       if (captured.low && captured.high) renderSongMatches(Math.min(captured.low, captured.high), Math.max(captured.low, captured.high));
     } catch (error) {
-      status.textContent = "I couldn't hear a steady note. Try again with one clear sustained vowel.";
+      status.textContent = "I couldn't lock onto the pitch. Try holding a louder, steady “ah” close to the microphone.";
       status.className = "form-status error";
     } finally {
       if (stream) stream.getTracks().forEach((track) => track.stop());
