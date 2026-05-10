@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice Match | Mic Drop Karaoke Song Finder</title>
+  <meta name="description" content="Use Mic Drop Karaoke's Voice Match tool to estimate your low and high notes and find karaoke songs that fit your range." />
+  <link rel="stylesheet" href="styles.css?v=20260510-voice-match" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html#top" aria-label="Mic Drop Karaoke home"><span class="brand-mark">🎤</span><span>Mic Drop Karaoke</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+        <a href="index.html#events">Events</a><a href="voice-match.html">Voice Match</a><a href="index.html#photos">Photos</a><a href="index.html#packages">Packages</a><a href="index.html#service-area">Service Area</a><a href="index.html#reviews">Reviews</a><a href="index.html#faq">FAQ</a><a href="index.html#booking">Book Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section song-finder-section">
+      <div class="container song-finder-grid">
+        <div>
+          <p class="eyebrow">Voice Match</p>
+          <h1>Find karaoke songs that fit your voice.</h1>
+          <p class="hero-text">Sing a comfortable low note, then a comfortable high note. Voice Match estimates your range and ranks karaoke songs from a starter KaraFun-friendly catalog.</p>
+          <div class="range-readout" aria-live="polite">
+            <div><span>Low note</span><strong id="low-note-output">Not captured</strong></div>
+            <div><span>High note</span><strong id="high-note-output">Not captured</strong></div>
+          </div>
+        </div>
+
+        <div class="song-tool">
+          <div class="pitch-actions">
+            <button class="button primary" type="button" id="capture-low">Sing Lowest Note</button>
+            <button class="button secondary" type="button" id="capture-high">Sing Highest Note</button>
+          </div>
+          <div class="pitch-meter" aria-hidden="true"><div id="pitch-level"></div></div>
+          <p id="song-finder-status" class="form-status" role="status">Use a steady “ah” sound for about 3 seconds.</p>
+          <div id="song-results" class="song-results"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section booking-section">
+      <div class="container booking-grid">
+        <div>
+          <p class="eyebrow">Bring the songs to the party</p>
+          <h2>Book Mic Drop Karaoke for your event.</h2>
+          <p>Once you have a few songs in mind, bring the full karaoke night to your party, bar, fundraiser, or private event.</p>
+        </div>
+        <div class="booking-form">
+          <h3>Ready for a mic drop moment?</h3>
+          <p>Tell us about your event and we’ll help match the setup to the room, crowd, and energy you want.</p>
+          <a class="button primary" href="index.html#booking">Request Booking</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-wrap"><p>© <span id="current-year">2026</span> Mic Drop Karaoke. All rights reserved.</p><a href="index.html#top">Back to home</a></div></footer>
+  <script src="sitedata.js?v=20260510-song-finder-2"></script><script src="script-song-finder.js?v=20260510-song-ranking"></script>
+</body>
+</html>
