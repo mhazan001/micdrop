@@ -201,6 +201,137 @@ function setupMobileNav() {
   nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => nav.classList.remove("open")));
 }
 
+function frequencyToMidi(frequency) {
+  return Math.round(69 + 12 * Math.log2(frequency / 440));
+}
+
+function midiToNoteName(midi) {
+  const names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  return `${names[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
+}
+
+function detectPitch(buffer, sampleRate) {
+  let rms = 0;
+  for (const sample of buffer) rms += sample * sample;
+  rms = Math.sqrt(rms / buffer.length);
+  if (rms < 0.015) return null;
+
+  let bestOffset = -1;
+  let bestCorrelation = 0;
+  const minOffset = Math.floor(sampleRate / 900);
+  const maxOffset = Math.floor(sampleRate / 70);
+
+  for (let offset = minOffset; offset <= maxOffset; offset++) {
+    let correlation = 0;
+    for (let i = 0; i < buffer.length - offset; i++) {
+      correlation += buffer[i] * buffer[i + offset];
+    }
+    correlation /= buffer.length - offset;
+    if (correlation > bestCorrelation) {
+      bestCorrelation = correlation;
+      bestOffset = offset;
+    }
+  }
+
+  if (bestOffset < 0 || bestCorrelation < 0.01) return null;
+  return sampleRate / bestOffset;
+}
+
+function scoreSongForRange(song, lowMidi, highMidi) {
+  const lowGap = Math.max(0, lowMidi - song.low);
+  const highGap = Math.max(0, song.high - highMidi);
+  const comfortBonus = song.low >= lowMidi - 2 && song.high <= highMidi + 2 ? 6 : 0;
+  return 100 - (lowGap + highGap) * 8 + comfortBonus - Math.abs((song.high - song.low) - (highMidi - lowMidi));
+}
+
+function renderSongMatches(lowMidi, highMidi) {
+  const results = document.getElementById("song-results");
+  if (!results || typeof KARAFUN_SONG_SUGGESTIONS === "undefined") return;
+  const sorted = KARAFUN_SONG_SUGGESTIONS
+    .map((song) => ({ ...song, score: scoreSongForRange(song, lowMidi, highMidi) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
+
+  results.innerHTML = sorted.map((song) => {
+    const fit = song.low >= lowMidi && song.high <= highMidi ? "Comfort fit" : "Try with confidence";
+    return `<article class="song-card"><div><h3>${escapeHtml(song.title)}</h3><p>${escapeHtml(song.artist)}</p></div><span>${escapeHtml(song.vibe)}</span><small>${midiToNoteName(song.low)} - ${midiToNoteName(song.high)} · ${fit}</small></article>`;
+  }).join("");
+}
+
+function setupSongFinder() {
+  const lowButton = document.getElementById("capture-low");
+  const highButton = document.getElementById("capture-high");
+  const lowOutput = document.getElementById("low-note-output");
+  const highOutput = document.getElementById("high-note-output");
+  const status = document.getElementById("song-finder-status");
+  const level = document.getElementById("pitch-level");
+  if (!lowButton || !highButton || !lowOutput || !highOutput || !status) return;
+
+  const captured = { low: null, high: null };
+
+  async function capture(kind) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      status.textContent = "Microphone capture is not available in this browser.";
+      status.className = "form-status error";
+      return;
+    }
+
+    const button = kind === "low" ? lowButton : highButton;
+    button.disabled = true;
+    status.textContent = kind === "low" ? "Listening for your lowest comfortable note..." : "Listening for your highest comfortable note...";
+    status.className = "form-status";
+
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) throw new Error("AudioContext is not available");
+      const audioContext = new AudioContextClass();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048;
+      source.connect(analyser);
+      const data = new Float32Array(analyser.fftSize);
+      const readings = [];
+      const start = performance.now();
+
+      await new Promise((resolve) => {
+        function tick(now) {
+          analyser.getFloatTimeDomainData(data);
+          const frequency = detectPitch(data, audioContext.sampleRate);
+          if (frequency) {
+            readings.push(frequencyToMidi(frequency));
+            if (level) level.style.width = `${Math.min(100, Math.max(8, (frequency / 8)))}%`;
+          }
+          if (now - start < 3200) requestAnimationFrame(tick);
+          else resolve();
+        }
+        requestAnimationFrame(tick);
+      });
+
+      await audioContext.close();
+      const useful = readings.filter((midi) => midi >= 35 && midi <= 85);
+      if (!useful.length) throw new Error("No steady note detected");
+      const midi = kind === "low" ? Math.min(...useful) : Math.max(...useful);
+      captured[kind] = midi;
+      (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
+      status.textContent = captured.low && captured.high ? "Nice. Here are songs that should fit your range." : "Captured. Now record the other end of your range.";
+      status.className = "form-status success";
+      if (captured.low && captured.high) renderSongMatches(Math.min(captured.low, captured.high), Math.max(captured.low, captured.high));
+    } catch (error) {
+      status.textContent = "I couldn't hear a steady note. Try again with one clear sustained vowel.";
+      status.className = "form-status error";
+    } finally {
+      if (stream) stream.getTracks().forEach((track) => track.stop());
+      button.disabled = false;
+      if (level) level.style.width = "0";
+    }
+  }
+
+  lowButton.addEventListener("click", () => capture("low"));
+  highButton.addEventListener("click", () => capture("high"));
+}
+
 function initSite() {
   const year = document.getElementById("current-year");
   if (year) year.textContent = new Date().getFullYear();
@@ -209,6 +340,7 @@ function initSite() {
   setupReviewAutoScroll();
   setupAjaxForm("booking-form", "form-status", "Thanks! Your booking request was sent.");
   setupAjaxForm("review-form", "review-status", "Thanks! Your review was submitted for approval.");
+  setupSongFinder();
   setupMobileNav();
 }
 
