@@ -205,6 +205,10 @@ function frequencyToMidi(frequency) {
   return Math.round(69 + 12 * Math.log2(frequency / 440));
 }
 
+function midiToFrequency(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
 function midiToNoteName(midi) {
   const names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
   return `${names[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
@@ -251,6 +255,36 @@ function detectPitch(buffer, sampleRate) {
   const adjustment = (after - before) / (2 * (2 * current - before - after));
   const tau = Number.isFinite(adjustment) ? bestTau + adjustment : bestTau;
   return sampleRate / tau;
+}
+
+function getSpectrumValue(data, bin) {
+  const low = Math.floor(bin);
+  const high = Math.ceil(bin);
+  if (low < 0 || high >= data.length) return 0;
+  return data[low] + (data[high] - data[low]) * (bin - low);
+}
+
+function detectSpectralPitch(data, sampleRate) {
+  const binHz = sampleRate / (data.length * 2);
+  let bestMidi = null;
+  let bestScore = 0;
+
+  for (let midi = 35; midi <= 84; midi += 0.5) {
+    const frequency = midiToFrequency(midi);
+    let score = 0;
+    for (let harmonic = 1; harmonic <= 6; harmonic++) {
+      const harmonicFrequency = frequency * harmonic;
+      if (harmonicFrequency > 1800) break;
+      score += getSpectrumValue(data, harmonicFrequency / binHz) / harmonic;
+    }
+    score -= Math.max(0, frequency - 500) * 0.015;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMidi = midi;
+    }
+  }
+
+  return bestScore > 18 && bestMidi ? midiToFrequency(Math.round(bestMidi)) : null;
 }
 
 function getStableMidi(readings) {
@@ -313,18 +347,23 @@ function setupSongFinder() {
       const audioContext = new AudioContextClass();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 4096;
+      analyser.fftSize = 8192;
+      analyser.smoothingTimeConstant = 0.7;
       source.connect(analyser);
       const data = new Float32Array(analyser.fftSize);
+      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
       const readings = [];
       const start = performance.now();
 
       await new Promise((resolve) => {
         function tick(now) {
           analyser.getFloatTimeDomainData(data);
-          const frequency = detectPitch(data, audioContext.sampleRate);
+          analyser.getByteFrequencyData(frequencyData);
+          const frequency = detectPitch(data, audioContext.sampleRate) || detectSpectralPitch(frequencyData, audioContext.sampleRate);
           if (frequency) {
-            readings.push(frequencyToMidi(frequency));
+            const midi = frequencyToMidi(frequency);
+            readings.push(midi);
+            (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
             if (level) level.style.width = `${Math.min(100, Math.max(8, (frequency / 8)))}%`;
           }
           if (now - start < 3200) requestAnimationFrame(tick);
