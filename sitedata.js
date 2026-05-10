@@ -22,6 +22,8 @@ const UPCOMING_EVENTS = [
     startTime: "20:00",
     endTime: "00:00",
     location: "110 East Fairfax St, Falls Church, VA",
+    venueUrl: "https://www.audaciousaleworks.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=110%20East%20Fairfax%20St%2C%20Falls%20Church%2C%20VA",
     description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
     isPrivate: false
   },
@@ -31,7 +33,9 @@ const UPCOMING_EVENTS = [
     startTime: "20:00",
     endTime: "00:00",
     location: "110 East Fairfax St, Falls Church, VA",
-    description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
+    venueUrl: "https://www.audaciousaleworks.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=110%20East%20Fairfax%20St%2C%20Falls%20Church%2C%20VA",
+    description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
     isPrivate: false
   },
   {
@@ -40,6 +44,8 @@ const UPCOMING_EVENTS = [
     startTime: "21:00",
     endTime: "00:00",
     location: "130 N Washington St, Falls Church, VA",
+    venueUrl: "https://clareanddons.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=130%20N%20Washington%20St%2C%20Falls%20Church%2C%20VA",
     description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
   },
@@ -49,6 +55,8 @@ const UPCOMING_EVENTS = [
     startTime: "21:00",
     endTime: "00:00",
     location: "130 N Washington St, Falls Church, VA",
+    venueUrl: "https://clareanddons.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=130%20N%20Washington%20St%2C%20Falls%20Church%2C%20VA",
     description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
   }
