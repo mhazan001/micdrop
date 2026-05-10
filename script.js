@@ -271,7 +271,7 @@ function setupSongFinder() {
 
   async function capture(kind) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      status.textContent = "Microphone capture is not available in this browser.";
+      status.textContent = "Microphone capture needs the live HTTPS site and a browser that allows mic access.";
       status.className = "form-status error";
       return;
     }
