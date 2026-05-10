@@ -60,9 +60,9 @@ function formatICSDateLocal(date) {
 function cleanICSValue(value) {
   return String(value || "")
     .replaceAll("\\", "\\\\")
-    .replaceAll(",", "\\,")
-    .replaceAll(";", "\\;")
-    .replaceAll("\n", "\\n");
+    .replaceAll(",", "\,")
+    .replaceAll(";", "\;")
+    .replaceAll("\n", "\n");
 }
 
 function createICSContent(event) {
@@ -295,25 +295,47 @@ function getStableMidi(readings) {
   return useful[Math.floor(useful.length / 2)];
 }
 
+function adjustLikelyOctave(kind, midi, captured) {
+  if (kind === "high" && captured.low && midi - captured.low < 10 && midi + 12 <= 85) {
+    return midi + 12;
+  }
+  if (kind === "low" && captured.high && captured.high - midi < 10 && midi - 12 >= 35) {
+    return midi - 12;
+  }
+  return midi;
+}
+
 function scoreSongForRange(song, lowMidi, highMidi) {
-  const lowGap = Math.max(0, lowMidi - song.low);
-  const highGap = Math.max(0, song.high - highMidi);
-  const comfortBonus = song.low >= lowMidi - 2 && song.high <= highMidi + 2 ? 6 : 0;
-  return 100 - (lowGap + highGap) * 8 + comfortBonus - Math.abs((song.high - song.low) - (highMidi - lowMidi));
+  const missedLowNotes = Math.max(0, lowMidi - song.low);
+  const missedHighNotes = Math.max(0, song.high - highMidi);
+  const userRange = highMidi - lowMidi;
+  const songRange = song.high - song.low;
+  const exactFitBonus = song.low >= lowMidi && song.high <= highMidi ? 40 : 0;
+  const closeFitBonus = song.low >= lowMidi - 2 && song.high <= highMidi + 2 ? 18 : 0;
+  return 100 + exactFitBonus + closeFitBonus - missedLowNotes * 14 - missedHighNotes * 18 - Math.abs(songRange - userRange) * 1.5;
 }
 
 function renderSongMatches(lowMidi, highMidi) {
   const results = document.getElementById("song-results");
   if (!results || typeof KARAFUN_SONG_SUGGESTIONS === "undefined") return;
+  if (highMidi - lowMidi < 10) {
+    results.innerHTML = '<article class="song-card"><div><h3>Try one more capture</h3><p>Your captured range is very narrow, so song matches would be unreliable. Sing your highest comfortable note again and hold it a little longer.</p></div><span>Retest</span></article>';
+    return false;
+  }
   const sorted = KARAFUN_SONG_SUGGESTIONS
     .map((song) => ({ ...song, score: scoreSongForRange(song, lowMidi, highMidi) }))
     .sort((a, b) => b.score - a.score)
     .slice(0, 6);
 
   results.innerHTML = sorted.map((song) => {
-    const fit = song.low >= lowMidi && song.high <= highMidi ? "Comfort fit" : "Try with confidence";
+    const fit = song.low >= lowMidi && song.high <= highMidi
+      ? "Best fit"
+      : song.low >= lowMidi - 2 && song.high <= highMidi + 2
+        ? "Close fit"
+        : "Key change likely";
     return `<article class="song-card"><div><h3>${escapeHtml(song.title)}</h3><p>${escapeHtml(song.artist)}</p></div><span>${escapeHtml(song.vibe)}</span><small>${midiToNoteName(song.low)} - ${midiToNoteName(song.high)} · ${fit}</small></article>`;
   }).join("");
+  return sorted.some((song) => song.low >= lowMidi && song.high <= highMidi);
 }
 
 function setupSongFinder() {
@@ -373,13 +395,25 @@ function setupSongFinder() {
       });
 
       await audioContext.close();
-      const midi = getStableMidi(readings);
-      if (!midi) throw new Error("No steady note detected");
+      const rawMidi = getStableMidi(readings);
+      if (!rawMidi) throw new Error("No steady note detected");
+      const midi = adjustLikelyOctave(kind, rawMidi, captured);
       captured[kind] = midi;
-      (kind === "low" ? lowOutput : highOutput).textContent = midiToNoteName(midi);
-      status.textContent = captured.low && captured.high ? "Nice. Here are songs that should fit your range." : "Captured. Now record the other end of your range.";
+      lowOutput.textContent = captured.low ? midiToNoteName(captured.low) : "Not captured";
+      highOutput.textContent = captured.high ? midiToNoteName(captured.high) : "Not captured";
+      status.textContent = captured.low && captured.high ? "Captured. Ranking songs by how closely they match your range." : "Captured. Now record the other end of your range.";
       status.className = "form-status success";
-      if (captured.low && captured.high) renderSongMatches(Math.min(captured.low, captured.high), Math.max(captured.low, captured.high));
+      if (captured.low && captured.high) {
+        const low = Math.min(captured.low, captured.high);
+        const high = Math.max(captured.low, captured.high);
+        const hasExactFit = renderSongMatches(low, high);
+        status.textContent = high - low < 10
+          ? "That captured range is too narrow for useful song picks. Try the high note again."
+          : hasExactFit
+            ? "Nice. These songs fit inside your captured range."
+            : "These are the closest matches. Songs marked key change likely may need a different key.";
+        status.className = high - low < 10 ? "form-status error" : "form-status success";
+      }
     } catch (error) {
       status.textContent = "I couldn't lock onto the pitch. Try holding a louder, steady “ah” close to the microphone.";
       status.className = "form-status error";
