@@ -64,6 +64,14 @@ const UPCOMING_EVENTS = [
 
 const APPROVED_REVIEWS = [
   {
+    name: "Audacious Aleworks",
+    eventType: "Karaoke",
+    rating: 5,
+    quote: "Happy to say these guys started their journey at Audacious!  They are absolutely awesome and whether you’re looking to run an event at your business or yiu are doing a private event, I can absolutely assure you that you are getting the best MCs you will ever have!",
+    sourceIssue: "https://github.com/mhazan001/micdrop/issues/5"
+  },
+
+  {
     name: "Samantha Chen",
     eventType: "Audacious Event",
     rating: 5,
