@@ -27,7 +27,6 @@ const UPCOMING_EVENTS = [
     description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
     isPrivate: false
   },
-
   {
     title: "Karaoke Night at Clare and Don's Beach Shack",
     date: "2026-06-27",
@@ -49,7 +48,7 @@ const UPCOMING_EVENTS = [
     mapUrl: "https://www.google.com/maps/search/?api=1&query=130%20N%20Washington%20St%2C%20Falls%20Church%2C%20VA",
     description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
-  }
+  },
    {
     title: "Karaoke Night at Audacious Aleworks",
     date: "2026-08-07",
