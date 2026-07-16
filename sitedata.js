@@ -41,7 +41,7 @@ const UPCOMING_EVENTS = [
   {
     title: "Karaoke Night at Clare and Don's Beach Shack",
     date: "2026-07-18",
-    startTime: "21:00",
+    startTime: "20:00",
     endTime: "00:00",
     location: "130 N Washington St, Falls Church, VA",
     venueUrl: "https://clareanddons.com/",
@@ -53,7 +53,7 @@ const UPCOMING_EVENTS = [
     title: "Karaoke Night at Audacious Aleworks",
     date: "2026-08-07",
     startTime: "20:00",
-    endTime: "24:00",
+    endTime: "00:00",
     location: "110 East Fairfax St, Falls Church, VA",
     venueUrl: "https://www.audaciousaleworks.com/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=110%20East%20Fairfax%20St%2C%20Falls%20Church%2C%20VA",
