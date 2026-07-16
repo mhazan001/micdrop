@@ -50,6 +50,17 @@ const UPCOMING_EVENTS = [
     description: "Come out for karaoke, beach-shack energy, and your next mic drop moment.",
     isPrivate: false
   }
+   {
+    title: "Karaoke Night at Audacious Aleworks",
+    date: "2026-08-07",
+    startTime: "20:00",
+    endTime: "24:00",
+    location: "110 East Fairfax St, Falls Church, VA",
+    venueUrl: "https://www.audaciousaleworks.com/",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=110%20East%20Fairfax%20St%2C%20Falls%20Church%2C%20VA",
+    description: "Join Mic Drop Karaoke for a high-energy night of singing, laughs, and crowd favorites.",
+    isPrivate: false
+  }
 ];
 
 const APPROVED_REVIEWS = [
